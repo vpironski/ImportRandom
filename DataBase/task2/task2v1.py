@@ -3,4 +3,3 @@ choice = choice.lower()
 
 if choice == "insert":
     from insert_v_1 import INSERT
-    s = INSERT()

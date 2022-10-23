@@ -35,6 +35,8 @@ while True:
         break
     else:
         break
+
+    
 #Gets the last name of the student
 while True:
     family = input("Student's family name: ")
@@ -91,7 +93,7 @@ while True:
     room = int(input("Student's room: "))
     check = str(room)
 
-    if len(check) > 3:
+    if len(check) != 3:
         print("Error: This is an invalid room number")
         continue
     else:
@@ -113,8 +115,11 @@ while True:
 while True:
     score = float(input("Student's score: "))
     check = str(score)
+    if score > 6 or score < 2:
+        print("Error: This is an incorrect grade")
+
     if len(check) > 4:
-        print("Error: The score is too big")
+        print("Error: This is an incorrect grade")
         continue
     else:
         break
@@ -124,3 +129,5 @@ while True:
 #Calling of the class
 student = INSERT(name,diffName,family,diffFamily,number,town,diffTown,gender,room,birth_date,score)
 print(student)
+
+# THIS IS WHERE WE ADD TO DB

@@ -21,7 +21,7 @@ class INSERT:
             return f"{self.name}{self.diffName}{self.family}{self.diffFamily}{self.number}_{self.town}{self.diffTown}{self.gender}_{self.room}_{self.birth_date}_{self.score}"
 
 
-    #Gets the first name of the student
+#Gets the first name of the student
     while True:
         name = input("Student's name: ")
         name = name.lower()
@@ -51,6 +51,7 @@ class INSERT:
             break
         else:
             break
+    
 
     #Gets the course number of the student
     while True:
@@ -58,7 +59,7 @@ class INSERT:
         check = str(number)
 
         if len(check) != 5:
-            print("Error: Exeded the limit of characters in the course number")
+            print("Error: This is not a correct course number")
             continue
         else:
             break
@@ -101,7 +102,6 @@ class INSERT:
 
     #Gets the birth date of the student
     while True:
-
         try:
             date_comp = input("Student's birth date ('YYYY-MM-DD'): ")
             year, mounth, day = map(int, date_comp.split('-'))
@@ -124,6 +124,7 @@ class INSERT:
             continue
         else:
             break
+
 
     
 

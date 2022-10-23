@@ -1,5 +1,4 @@
 from datetime import date
-
 class INSERT:
 
     class Student:
@@ -102,6 +101,7 @@ class INSERT:
 
     #Gets the birth date of the student
     while True:
+
         try:
             date_comp = input("Student's birth date ('YYYY-MM-DD'): ")
             year, mounth, day = map(int, date_comp.split('-'))

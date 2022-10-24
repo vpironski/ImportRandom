@@ -1,2 +1,2 @@
-class App :
+class App:
     from insert import INSERT

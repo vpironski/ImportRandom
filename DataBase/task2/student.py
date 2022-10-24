@@ -1,7 +1,5 @@
 from datetime import date
-class INSERT:
-
-    class Student:
+class Student:
         def __init__(self,name,diffName,family,diffFamily,number,town,diffTown,gender,room,birth_date,score):
             '''Gets fed the values of the student'''
             self.name = name
@@ -115,24 +113,3 @@ class INSERT:
             '''Organises the values of the student into a line'''
             return f"{self.name}{self.diffName}{self.family}{self.diffFamily}{self.number}_{self.town}{self.diffTown}{self.gender}_{self.room}_{self.birth_date}_{self.score}"
 
-
-# initialization of the variables
-    name= ""
-    diffName= 0
-    family = ""
-    diffFamily= 0
-    number = 0
-    town = ""
-    diffTown = ""
-    gender = ''
-    room = 0
-    birth_date = ""
-    score = 0.00
-
-    #Calling of the class
-
-
-    student = Student(name,diffName,family,diffFamily,number,town,diffTown,gender,room,birth_date,score)
-    print(student)
-
-    # THIS IS WHERE WE ADD TO DB

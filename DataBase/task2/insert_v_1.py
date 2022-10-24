@@ -21,7 +21,7 @@ class INSERT:
             return f"{self.name}{self.diffName}{self.family}{self.diffFamily}{self.number}_{self.town}{self.diffTown}{self.gender}_{self.room}_{self.birth_date}_{self.score}"
 
 
-#Gets the first name of the student
+#Gets the first name of the student (Input of name)
     while True:
         name = input("Student's name: ")
         name = name.lower()
@@ -37,7 +37,7 @@ class INSERT:
             break
 
 
-    #Gets the last name of the student
+    #Gets the last name of the student (Input of family)
     while True:
         family = input("Student's family name: ")
         family = family.lower()
@@ -53,7 +53,7 @@ class INSERT:
             break
     
 
-    #Gets the course number of the student
+    #Gets the course number of the student (Input of number)
     while True:
         number = int(input("Student's course number: "))
         check = str(number)
@@ -64,7 +64,7 @@ class INSERT:
         else:
             break
 
-    #Gets the town of the student
+    #Gets the town of the student (Input of town)
     while True:
         town = input("Student's town: ")
         town = town.lower()
@@ -79,7 +79,7 @@ class INSERT:
         else:
             break
 
-    #Gets the gender of the student
+    #Gets the gender of the student (Input of student)
     while True:
         gender = input("The gender of the student is (m or f): ")
 
@@ -89,7 +89,7 @@ class INSERT:
             print("Error: You have enter the wrong input for gender")
             continue
 
-    #Gets the room of the student
+    #Gets the room of the student (Input of room)
     while True:
         room = int(input("Student's room: "))
         check = str(room)
@@ -100,7 +100,7 @@ class INSERT:
         else:
             break
 
-    #Gets the birth date of the student
+    #Gets the birth date of the student (Input of birth date)
     while True:
         try:
             date_comp = input("Student's birth date ('YYYY-MM-DD'): ")
@@ -112,7 +112,7 @@ class INSERT:
         else:
             break
 
-    #Gets the score of the student
+    #Gets the score of the student (Input score)
     while True:
         score = float(input("Student's score: "))
         check = str(score)

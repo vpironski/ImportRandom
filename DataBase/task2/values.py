@@ -1,5 +1,5 @@
 from datetime import date
-class Student:
+class insertValues:
         def __init__(self,name,diffName,family,diffFamily,number,town,diffTown,gender,room,birth_date,score):
             '''Gets fed the values of the student'''
             self.name = name
@@ -14,8 +14,9 @@ class Student:
             self.birth_date = birth_date
             self.score = score
 
-        def __str__(self):
+        def __str__(self): # all the inputs are here
 
+            # Name input
             while True:
                 self.name = input("Student's name: ")
                 self.name = self.name.lower()
@@ -30,6 +31,7 @@ class Student:
                 else:
                     break
 
+            # family name input
             while True:
                 self.family = input("Student's name: ")
                 self.family = self.family.lower()
@@ -44,6 +46,7 @@ class Student:
                 else:
                     break
             
+            # number inpuit
             while True:
                 self.number = int(input("Student's course number: "))
                 check = str(self.number)
@@ -54,6 +57,7 @@ class Student:
                 else:
                     break
             
+            # town input
             while True:
                 self.town = input("Student's town: ")
                 self.town = self.town.lower()
@@ -68,6 +72,7 @@ class Student:
                 else:
                     break
 
+            # gender input
             while True:
                 self.gender = input("The gender of the student is (m or f): ")
 
@@ -77,6 +82,7 @@ class Student:
                     print("Error: You have enter the wrong input for gender")
                     continue
 
+            # room input
             while True:
                 self.room = int(input("Student's room: "))
                 check = str(self.room)
@@ -87,6 +93,7 @@ class Student:
                 else:
                     break
 
+            # birth date input
             while True:
                 try:
                     date_comp = input("Student's birth date ('YYYY-MM-DD'): ")
@@ -98,14 +105,15 @@ class Student:
                 else:
                     break 
 
+            # grade input
             while True:
                 self.score = float(input("Student's score: "))
                 check = str(self.score)
                 if self.score > 6 or self.score < 2:
                     print("Error: This is an incorrect grade")
 
-                if len(check) > 4:
-                    print("Error: This is an incorrect grade")
+                elif len(check) > 4:
+                    print("Error: This is too long")
                     continue
                 else:
                     break

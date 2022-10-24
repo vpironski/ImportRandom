@@ -1,6 +1,5 @@
-
 class INSERT:
-    from student import Student
+    from values import insertValues
 # initialization of the variables
     name= ""
     diffName= 0
@@ -17,7 +16,6 @@ class INSERT:
     #Calling of the class
 
 
-    student = Student(name,diffName,family,diffFamily,number,town,diffTown,gender,room,birth_date,score)
+    student = insertValues(name,diffName,family,diffFamily,number,town,diffTown,gender,room,birth_date,score)
     print(student)
-
     # THIS IS WHERE WE ADD TO DB

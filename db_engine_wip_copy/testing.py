@@ -1,3 +1,3 @@
-from db_module import Init_db
+from db_module import Init_Db
 
-i = Init_db("db_engine_wip_copy/test_db.txt")
+db = Init_Db("db_engine_wip_copy/test_db.txt")

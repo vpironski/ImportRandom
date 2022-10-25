@@ -7,8 +7,6 @@ class Database:  # обект(клас) който ще съдържа конф�
 
     def __init__(self, path_to_db):
         self.path = path_to_db
-        name = ''
-        size_or_type = ''
 
         with open(path_to_db, encoding='utf-8') as database_file:
             config = database_file.read(1)

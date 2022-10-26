@@ -1,0 +1,8 @@
+add indexing to config file to speed up other methods
+add data types for every colon in config (for value type)
+fix endless while
+discuss gui or cli interface
+avoid null pointers when closing a database
+add validation for each row
+add a way to cancel anything (create/insert/open....)
+add drop (not close)

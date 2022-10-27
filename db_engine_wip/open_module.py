@@ -1,8 +1,7 @@
 import re
-import io
 
 
-class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
+class Open_Database:  # обект(клас) който ще съдържа конфигурацията на базата данни 
     colons = dict()
     path = ''
 
@@ -11,10 +10,11 @@ class Database:  # обект(клас) който ще съдържа конф�
 
         with open(path_to_db, encoding='utf-8') as database_file:
             config = database_file.read(1)
-            # endless while
             while config[-1] != '~':
                 config += database_file.read(1)
-        print(config)
+
+        # print(config)
+        
         if bool(self.validate_config(config)):
             for colon in config.lower().strip(',~').split(','):
                 name = re.sub(r'\|.*?\||[0-9]+', '', colon)
@@ -23,12 +23,10 @@ class Database:  # обект(клас) който ще съдържа конф�
                     size_or_type = int(size_or_type)
                 self.colons.update({name: size_or_type})
         else:
-            print("Invalid config!")
+            #print("Invalid config!")
+            pass
 
     @staticmethod
     def validate_config(config):
         regex = re.compile(r'(([a-z]+(_[a-z]+)*[0-9]+,)|([a-z]+(_[a-z]+)*\|[^|]+\|,))+~$')
         return re.fullmatch(regex, config)
-
-    @staticmethod
-    def create():

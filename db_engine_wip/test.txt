@@ -1,1 +1,0 @@
-name(10),family(20),birth_date|data|,~

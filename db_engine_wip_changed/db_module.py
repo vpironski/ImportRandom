@@ -30,5 +30,21 @@ class Database:  # обект(клас) който ще съдържа конф�
         regex = re.compile(r'(([a-z]+(_[a-z]+)*[0-9]+,)|([a-z]+(_[a-z]+)*\|[^|]+\|,))+~$')
         return re.fullmatch(regex, config)
 
+<<<<<<< Updated upstream:db_engine_wip_changed/db_module.py
     @staticmethod
     def create():
+=======
+    def get_entry_length(self):
+        length = 0
+        for value in list(self.colons.values()):
+            if str(value).isnumeric():
+                length += value
+            else:
+                # add different data types here with their corresponding length (example 'date': 10)
+                types_length = {'date': 10}
+                length += types_length.get(value)
+        return length
+
+# create
+# drop (delete)
+>>>>>>> Stashed changes:db_engine_wip/open_module.py

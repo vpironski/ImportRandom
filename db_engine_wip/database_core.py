@@ -1,6 +1,7 @@
 import re
 import os
 
+types_length = {"date" : 10}
 
 class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
     colons = dict()
@@ -41,14 +42,24 @@ class Database:  # обект(клас) който ще съдържа конф�
             if str(value).isnumeric():
                 length += value
             else:
-                # add different data types here with their corresponding length (example 'date': 10)
-                types_length = {'date': 10}
                 length += types_length.get(value)
         return length
 
     @staticmethod
-    def create(config: dict):
-        pass
+    def create(dictionary,file):
+        list_colums=[]
+        for i in dictionary:
+            if dictionary[i] in types_length:
+                dictionary[i] = f"|{dictionary[i]}|"
+            list_colums.append(i + str(dictionary[i]))
+
+        with open(file, 'w', encoding='utf-8') as f:
+            for i in list_colums:
+                f.write(i + ',')
+            f.write('!')
+            
+        print(list_colums)
+            
     
     def drop(self):
         if os.path.exists(self.path):

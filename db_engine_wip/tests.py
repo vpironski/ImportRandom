@@ -10,4 +10,5 @@ import database_insert
 # del db
 
 input_for_create = {'name': 15, 'family': 15, 'town': 10, 'birth_date': 'date'}
-Database.create(input_for_create)
+db = "Databases/test_db.txt"
+Database.create(input_for_create,db)

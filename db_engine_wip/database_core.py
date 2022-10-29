@@ -46,8 +46,10 @@ class Database:  # обект(клас) който ще съдържа конф�
                 length += types_length.get(value)
         return length
 
-    # add create
-
+    @staticmethod
+    def create(config: dict):
+        pass
+    
     def drop(self):
         if os.path.exists(self.path):
             os.remove(self.path)

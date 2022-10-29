@@ -1,7 +1,7 @@
 from database_core import Database
 import database_insert
 
-# db = DatabaseCore('Databases/test_db.txt')
+# db = Database('Databases/test_db.txt')
 # print(db.colons)
 # print(db.entry_length)
 
@@ -9,4 +9,5 @@ import database_insert
 # db.drop()
 # del db
 
-
+input_for_create = {'name': 15, 'family': 15, 'town': 10, 'birth_date': 'date'}
+Database.create(input_for_create)

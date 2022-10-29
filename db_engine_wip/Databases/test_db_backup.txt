@@ -1,0 +1,1 @@
+name15,family20,number5,town20,gender1,room3,birth_date|date|,score4,!

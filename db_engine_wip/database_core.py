@@ -1,7 +1,8 @@
 import re
+import os
 
 
-class OpenDatabase:  # обект(клас) който ще съдържа конфигурацията на базата данни
+class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
     colons = dict()
     path = ''
     entry_length = 0
@@ -9,13 +10,14 @@ class OpenDatabase:  # обект(клас) който ще съдържа ко�
     def __init__(self, path_to_db):
         self.path = path_to_db
 
-        with open(path_to_db, encoding='utf-8') as database_file:
+        with open(path_to_db, 'r', encoding='utf-8') as database_file:
             config = database_file.read(1)
             while config[-1] != '!':
                 config += database_file.read(1)
+            database_file.close()
 
         # print(config)
-        
+
         if bool(self.validate_config(config)):
             for colon in config.lower().strip(',!').split(','):
                 name = re.sub(r'\|.*?\||[0-9]+', '', colon)
@@ -43,3 +45,10 @@ class OpenDatabase:  # обект(клас) който ще съдържа ко�
                 types_length = {'date': 10}
                 length += types_length.get(value)
         return length
+
+    # add create
+
+    def drop(self):
+        if os.path.exists(self.path):
+            os.remove(self.path)
+    # must always delete the object of this instance after calling this method

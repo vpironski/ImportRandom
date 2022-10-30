@@ -1,10 +1,15 @@
 import re
 import os
 
+# add different data types here with their corresponding length (example 'date': 10)
+types_length = {'date': 10}
+file_extension = '.datab'
+
 
 class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
     colons = dict()
     path = ''
+    name = ''
     entry_length = 0
 
     def __init__(self, path_to_db):
@@ -29,6 +34,7 @@ class Database:  # обект(клас) който ще съдържа конф�
             print("Invalid config!")
 
         self.entry_length = self.get_entry_length()
+        self.name = re.sub(file_extension, '', os.path.basename(self.path))
 
     @staticmethod
     def validate_config(config):
@@ -41,15 +47,13 @@ class Database:  # обект(клас) който ще съдържа конф�
             if str(value).isnumeric():
                 length += value
             else:
-                # add different data types here with their corresponding length (example 'date': 10)
-                types_length = {'date': 10}
                 length += types_length.get(value)
         return length
 
     @staticmethod
     def create(config: dict):
         pass
-    
+
     def drop(self):
         if os.path.exists(self.path):
             os.remove(self.path)

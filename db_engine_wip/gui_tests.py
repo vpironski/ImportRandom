@@ -19,9 +19,7 @@ def command_action(event):
         open_label = Label(frame, text=f'Currently open: {db.name}')
         open_label.grid(row=0, column=1, padx=10, pady=10, ipadx=3, ipady=3)
         if selection.get() == 'close':
-
             del db
-
 
 
 frame = Frame(root)
@@ -30,5 +28,5 @@ commands = ['open', 'close', 'drop', 'create', 'insert', 'select']
 selection = StringVar()
 selection.set('Select a command')
 dropdown = OptionMenu(frame, selection, *commands, command=command_action)
-dropdown.grid(row=0, column=0, padx=10, pady=10, ipadx=3, ipady=3,)
+dropdown.grid(row=0, column=0, padx=10, pady=10, ipadx=3, ipady=3, )
 root.mainloop()

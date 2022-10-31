@@ -26,7 +26,7 @@ class Database:  # обект(клас) който ще съдържа конф�
         if bool(self.validate_config(config)):
             for colon in config.lower().strip(',!').split(','):
                 name = re.sub(r'\|.*?\||[0-9]+', '', colon)
-                size_or_type = colon.replace(name, '').strip('|')
+                size_or_type = re.search(r'\|.*?\||[0-9]+', colon)[0].strip('|')
                 if size_or_type.isnumeric():
                     size_or_type = int(size_or_type)
                 self.colons.update({name: size_or_type})

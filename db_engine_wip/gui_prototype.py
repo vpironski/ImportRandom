@@ -6,6 +6,8 @@ import database_core
 from database_core import Database
 import database_insert
 
+# hints_for_types = {'date': ''}
+
 root = Tk()
 root.title('Import Random DB v1')
 # root.iconbitmap("c:/vs.code/images/dice.ICO")
@@ -66,6 +68,8 @@ def update_open_label():
 
 def create():
     clear()
+    # add the create method ui
+    # add hints for available types
     pass
 
 
@@ -86,14 +90,22 @@ def insert():
             Entry(insert_input_frame).grid(row=i, column=1, padx=3, pady=3, ipadx=3, ipady=3)
             Label(insert_input_frame, text=db.colons.get(colon)).grid(row=i, column=2, padx=3, pady=3, ipadx=3, ipady=3)
             button_row += 1
-        Button(insert_master, text='Add', width=10, command=add_to_db).grid(row=button_row, column=1, padx=3,
-                                                                            sticky='w', pady=3, ipadx=3, ipady=3)
+        Button(insert_master, text='Add', width=10, bg='green', fg='white', command=add_to_db).grid(row=button_row,
+                                                                                                    column=0, padx=3,
+                                                                                                    pady=3, ipadx=3,
+                                                                                                    ipady=3)
         insert_master.grid(row=1, sticky='NW')
 
 
 def clear():
     for widget in root.grid_slaves(row=1):
         widget.grid_forget()
+
+
+def error_handler(errors: list):
+    # add new frame in root (row=1, column=1)
+    # display errors in there
+    pass
 
 
 global db

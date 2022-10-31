@@ -2,7 +2,7 @@ import re
 import os
 
 # add different data types here with their corresponding length (example 'date': 10)
-types_length = {'date': 10}
+types_length = {'date': 10, 'gender': 1}
 file_extension = '.datab'
 
 
@@ -51,8 +51,19 @@ class Database:  # обект(клас) който ще съдържа конф�
         return length
 
     @staticmethod
-    def create(config: dict):
-        pass
+    def create(config_dictionary, file):
+        list_columns = []
+        for i in config_dictionary:
+            if config_dictionary[i] in types_length:
+                config_dictionary[i] = f"|{config_dictionary[i]}|"
+            list_columns.append(i + str(config_dictionary[i]))
+
+        with open(file, 'w', encoding='utf-8') as f:
+            for i in list_columns:
+                f.write(i + ',')
+            f.write('!')
+
+        # print(list_columns)
 
     def drop(self):
         if os.path.exists(self.path):

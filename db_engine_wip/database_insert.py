@@ -21,7 +21,6 @@ def insert(database: database_core.Database, values: list):
 
 def check_lengths(database: database_core.Database, input_list: list):
     if not len(input_list) == len(database.colons):
-        print(input_list, len(input_list), len(database.colons))
         yield 'Wrong number of arguments!'
     else:
         for colon, value in zip(database.colons, input_list):

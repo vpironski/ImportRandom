@@ -14,7 +14,7 @@ class Database:  # обект(клас) който ще съдържа конф�
 
     def __init__(self, path_to_db):
         self.path = path_to_db
-
+        self.colons = dict()
         with open(path_to_db, 'r', encoding='utf-8') as database_file:
             config = database_file.read(1)
             while config[-1] != '!':
@@ -52,16 +52,18 @@ class Database:  # обект(клас) който ще съдържа конф�
 
     @staticmethod
     def create(config_dictionary, file):
-        list_columns = []
-        for i in config_dictionary:
-            if config_dictionary[i] in types_length:
-                config_dictionary[i] = f"|{config_dictionary[i]}|"
-            list_columns.append(i + str(config_dictionary[i]))
-
-        with open(file, 'w', encoding='utf-8') as f:
-            for i in list_columns:
-                f.write(i + ',')
-            f.write('!')
+        if os.path.exists(f'Databases/file'):
+            list_columns = []
+            for i in config_dictionary:
+                if config_dictionary[i] in types_length:
+                    config_dictionary[i] = f"|{config_dictionary[i]}|"
+                list_columns.append(i + str(config_dictionary[i]))
+            with open(file, 'w', encoding='utf-8') as f:
+                for i in list_columns:
+                    f.write(i + ',')
+                f.write('!')
+        else:
+            return ['File already exists!']
 
         # print(list_columns)
 

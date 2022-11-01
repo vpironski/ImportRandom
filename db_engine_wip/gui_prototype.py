@@ -185,7 +185,7 @@ def insert():
 def error_handler(errors: list):
     clear(error_frame)
     for error, row in zip(errors, range(len(errors))):
-        Label(error_frame, text=error, bg='gray', font=("Segoe UI", 10, 'normal')).grid(row=row, sticky='NW', padx=3,
+        Label(error_frame, text=error, bg='#abaaa9', font=("Segoe UI", 10, 'normal')).grid(row=row, sticky='NW', padx=3,
                                                                                         pady=3)
 
 

@@ -47,19 +47,22 @@ class Database:  # обект(клас) който ще съдържа конф�
         return length
 
     @staticmethod
-    def create(dictionary,file):
-        list_colums=[]
-        for i in dictionary:
-            if dictionary[i] in types_length:
-                dictionary[i] = f"|{dictionary[i]}|"
-            list_colums.append(i + str(dictionary[i]))
+    def create(config_dictionary, file):
+        if os.path.exists(f'Databases/file'):
+            list_columns = []
+            for i in config_dictionary:
+                if config_dictionary[i] in types_length:
+                    config_dictionary[i] = f"|{config_dictionary[i]}|"
+                list_columns.append(i + str(config_dictionary[i]))
+            with open(file, 'w', encoding='utf-8') as f:
+                for i in list_columns:
+                    f.write(i + ',')
+                f.write('!')
+        else:
+            return ['File already exists!']
 
-        with open(file, 'w', encoding='utf-8') as f:
-            for i in list_colums:
-                f.write(i + ',')
-            f.write('!')
-            
-        print(list_colums)
+        # print(list_columns)
+
             
     
     def drop(self):

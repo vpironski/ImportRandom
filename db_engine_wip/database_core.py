@@ -23,23 +23,20 @@ class Database:  # обект(клас) който ще съдържа конф�
 
         # print(config)
 
-        if bool(self.validate_config(config)):
             for colon in config.lower().strip(',!').split(','):
                 name = re.sub(r'\|.*?\||[0-9]+', '', colon)
                 size_or_type = re.search(r'\|.*?\||[0-9]+', colon)[0].strip('|')
                 if size_or_type.isnumeric():
                     size_or_type = int(size_or_type)
                 self.colons.update({name: size_or_type})
-        else:
-            print("Invalid config!")
 
         self.entry_length = self.get_entry_length()
         self.name = re.sub(file_extension, '', os.path.basename(self.path))
 
     @staticmethod
-    def validate_config(config):
-        regex = re.compile(r'(([a-z]+(_[a-z]+)*[0-9]+,)|([a-z]+(_[a-z]+)*\|[^|]+\|,))+!$')
-        return re.fullmatch(regex, config)
+    def validate_name(name):
+        regex = re.compile(r'[a-z]+(_[a-z]+)*')
+        return re.fullmatch(regex, name)
 
     def get_entry_length(self):
         length = 0
@@ -51,12 +48,13 @@ class Database:  # обект(клас) който ще съдържа конф�
         return length
 
     @staticmethod
-    def create(config_dictionary, file):
-        if os.path.exists(f'Databases/file'):
+    def create(config_dictionary, name):
+        file = f'Databases/{name}{file_extension}'
+        if not os.path.exists(f'Databases/{file}'):
             list_columns = []
             for i in config_dictionary:
-                if config_dictionary[i] in types_length:
-                    config_dictionary[i] = f"|{config_dictionary[i]}|"
+                # if config_dictionary[i] in types_length:
+                #     config_dictionary[i] = f"|{config_dictionary[i]}|"
                 list_columns.append(i + str(config_dictionary[i]))
             with open(file, 'w', encoding='utf-8') as f:
                 for i in list_columns:

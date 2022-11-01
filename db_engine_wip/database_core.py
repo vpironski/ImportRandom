@@ -1,16 +1,20 @@
 import re
 import os
 
-types_length = {"date" : 10}
+# add different data types here with their corresponding length (example 'date': 10)
+types_length = {'date': 10, 'gender': 1}
+file_extension = '.datab'
+
 
 class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
     colons = dict()
     path = ''
+    name = ''
     entry_length = 0
 
     def __init__(self, path_to_db):
         self.path = path_to_db
-
+        self.colons = dict()
         with open(path_to_db, 'r', encoding='utf-8') as database_file:
             config = database_file.read(1)
             while config[-1] != '!':
@@ -22,7 +26,7 @@ class Database:  # обект(клас) който ще съдържа конф�
         if bool(self.validate_config(config)):
             for colon in config.lower().strip(',!').split(','):
                 name = re.sub(r'\|.*?\||[0-9]+', '', colon)
-                size_or_type = colon.replace(name, '').strip('|')
+                size_or_type = re.search(r'\|.*?\||[0-9]+', colon)[0].strip('|')
                 if size_or_type.isnumeric():
                     size_or_type = int(size_or_type)
                 self.colons.update({name: size_or_type})
@@ -30,6 +34,7 @@ class Database:  # обект(клас) който ще съдържа конф�
             print("Invalid config!")
 
         self.entry_length = self.get_entry_length()
+        self.name = re.sub(file_extension, '', os.path.basename(self.path))
 
     @staticmethod
     def validate_config(config):
@@ -46,21 +51,22 @@ class Database:  # обект(клас) който ще съдържа конф�
         return length
 
     @staticmethod
-    def create(dictionary,file):
-        list_colums=[]
-        for i in dictionary:
-            if dictionary[i] in types_length:
-                dictionary[i] = f"|{dictionary[i]}|"
-            list_colums.append(i + str(dictionary[i]))
+    def create(config_dictionary, file):
+        if os.path.exists(f'Databases/file'):
+            list_columns = []
+            for i in config_dictionary:
+                if config_dictionary[i] in types_length:
+                    config_dictionary[i] = f"|{config_dictionary[i]}|"
+                list_columns.append(i + str(config_dictionary[i]))
+            with open(file, 'w', encoding='utf-8') as f:
+                for i in list_columns:
+                    f.write(i + ',')
+                f.write('!')
+        else:
+            return ['File already exists!']
 
-        with open(file, 'w', encoding='utf-8') as f:
-            for i in list_colums:
-                f.write(i + ',')
-            f.write('!')
-            
-        print(list_colums)
-            
-    
+        # print(list_columns)
+
     def drop(self):
         if os.path.exists(self.path):
             os.remove(self.path)

@@ -1,1 +1,0 @@
-name15,family15,town10,birth_date|date|,!

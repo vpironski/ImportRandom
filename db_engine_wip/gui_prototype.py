@@ -50,7 +50,7 @@ def drop():
 
 
 def create():
-    # doesn't have a check for
+    # doesn't have a check for columns with the same names!
     input_frame_row = 0
     input_frame_column = 0
 
@@ -70,7 +70,6 @@ def create():
     def add():
         nonlocal input_frame_row
         nonlocal input_frame_column
-        # logic for shifting to next column not added yet
         clear(error_frame)
         text = ''
         name_text = name.get()
@@ -135,8 +134,6 @@ def create():
     create_input_frame.grid(row=4, columnspan=4, sticky='NW', ipadx=10, ipady=5)
 
     Button(main_frame, text='Delete', command=delete).grid(row=5)
-    # add filename label / save file dialog
-    # add 'Create' button -> make a dictionary from every label, Database.create()
     # add hints for available types
     pass
 

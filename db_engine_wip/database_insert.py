@@ -16,7 +16,7 @@ def insert(database: database_core.Database, values: list):
                     for i in range(length - len(value)):
                         db_file.write('~')
             db_file.close()
-        return 'Success!'
+        # return 'Success!'
 
 
 def check_lengths(database: database_core.Database, input_list: list):
@@ -35,5 +35,5 @@ def check_lengths(database: database_core.Database, input_list: list):
                     except ValueError:
                         yield ValueError(f'Incorrect data format at {colon}, should be YYYY-MM-DD')
                 elif length_or_type == 'gender':
-                    if re.fullmatch(r'[mfn]', value):
+                    if not re.fullmatch(r'[mfn]', value):
                         yield f'Incorrect value at {colon}, should be m/f/n'

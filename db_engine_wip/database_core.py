@@ -1,7 +1,8 @@
 import re
 import os
 
-types_length = {"date" : 10}
+types_length = {'date': 10, 'gender': 1}
+file_extension = '.datab'
 
 class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
     colons = dict()

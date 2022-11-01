@@ -85,6 +85,7 @@ def create():
                         text += f'|{length_text}|'
                     else:
                         error_handler(['Type not found!'])
+                        return
                 if input_frame_row == 5:
                     input_frame_row = 0
                     input_frame_column += 1

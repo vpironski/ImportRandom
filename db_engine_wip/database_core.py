@@ -1,17 +1,20 @@
 import re
 import os
 
+# add different data types here with their corresponding length (example 'date': 10)
 types_length = {'date': 10, 'gender': 1}
 file_extension = '.datab'
+
 
 class Database:  # обект(клас) който ще съдържа конфигурацията на базата данни
     colons = dict()
     path = ''
+    name = ''
     entry_length = 0
 
     def __init__(self, path_to_db):
         self.path = path_to_db
-
+        self.colons = dict()
         with open(path_to_db, 'r', encoding='utf-8') as database_file:
             config = database_file.read(1)
             while config[-1] != '!':
@@ -23,7 +26,7 @@ class Database:  # обект(клас) който ще съдържа конф�
         if bool(self.validate_config(config)):
             for colon in config.lower().strip(',!').split(','):
                 name = re.sub(r'\|.*?\||[0-9]+', '', colon)
-                size_or_type = colon.replace(name, '').strip('|')
+                size_or_type = re.search(r'\|.*?\||[0-9]+', colon)[0].strip('|')
                 if size_or_type.isnumeric():
                     size_or_type = int(size_or_type)
                 self.colons.update({name: size_or_type})
@@ -31,6 +34,7 @@ class Database:  # обект(клас) който ще съдържа конф�
             print("Invalid config!")
 
         self.entry_length = self.get_entry_length()
+        self.name = re.sub(file_extension, '', os.path.basename(self.path))
 
     @staticmethod
     def validate_config(config):
@@ -63,8 +67,6 @@ class Database:  # обект(клас) който ще съдържа конф�
 
         # print(list_columns)
 
-            
-    
     def drop(self):
         if os.path.exists(self.path):
             os.remove(self.path)

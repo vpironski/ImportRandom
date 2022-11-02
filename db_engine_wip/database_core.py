@@ -51,32 +51,21 @@ class Database:  # обект(клас) който ще съдържа конф�
     @staticmethod
     def create(config_dictionary, name):
 
-        os.chdir(os.getcwd()+"/db_engine_wip")
-        file =  f"Databases/{name}{file_extension}"
-        path = str(f"{os.getcwd()}/Databases/{file}")
+        os.chdir(os.getcwd()+"/Databases")
+        file = f"{name}{file_extension}"
+        path = str(f"{os.getcwd()}{file}")
 
-        if not os.path.exists(f"Databases/{file}"):
-
+        if not os.path.exists(path):
             list_columns = []
             for i in config_dictionary:
-                # if config_dictionary[i] in types_length:
-                #     config_dictionary[i] = f"|{config_dictionary[i]}|"
                 list_columns.append(i + str(config_dictionary[i]))
 
-            with open(file, 'w', encoding='utf-8') as f:
+            with open(path, 'w', encoding='utf-8') as f:
                 for i in list_columns:
                     f.write(i + ',')
                 f.write('!')
-            
-            # src = os.getcwd() + "/db_engine_wip"
-            # dst = os.getcwd() + "/db_engine_wip/Databases"
-
-            
-            # os.popen(f'cp db_engine_wip/{file} db_engine_wip/Databases/{file}')
         else:
             return ['File already exists!']
-
-        # print(list_columns)
 
     def drop(self):
         if os.path.exists(self.path):

@@ -17,7 +17,7 @@ def open_db():
     clear(main_frame)
     global is_open
     global db
-    filename = filedialog.askopenfilename(initialdir=os.getcwd() + '/Databases',
+    filename = filedialog.askopenfilename(initialdir=os.getcwd() + '/Databases/',
                                           title='Select a database',
                                           filetypes=(('databases', database_core.file_extension),))
     if filename:

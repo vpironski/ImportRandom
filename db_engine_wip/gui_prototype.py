@@ -6,8 +6,11 @@ import database_core
 from database_core import Database
 import database_insert
 
-
-# hints_for_types = {'date': ''}
+create_hints = [
+    f'Available types: {database_core.types_length.keys()}'
+    'Column names: 1 word only [a-z](uppercase too) or multiple words divided with \'_\'. '
+    'Column types or length: number (length) or type (see available types).'
+]
 
 
 def open_db():
@@ -50,7 +53,7 @@ def drop():
 
 
 def create():
-    # doesn't have a check for
+    # doesn't have a check for columns with the same names!
     input_frame_row = 0
     input_frame_column = 0
 
@@ -70,7 +73,6 @@ def create():
     def add():
         nonlocal input_frame_row
         nonlocal input_frame_column
-        # logic for shifting to next column not added yet
         clear(error_frame)
         text = ''
         name_text = name.get()
@@ -86,6 +88,7 @@ def create():
                         text += f'|{length_text}|'
                     else:
                         error_handler(['Type not found!'])
+                        return
                 if input_frame_row == 5:
                     input_frame_row = 0
                     input_frame_column += 1
@@ -135,8 +138,6 @@ def create():
     create_input_frame.grid(row=4, columnspan=4, sticky='NW', ipadx=10, ipady=5)
 
     Button(main_frame, text='Delete', command=delete).grid(row=5)
-    # add filename label / save file dialog
-    # add 'Create' button -> make a dictionary from every label, Database.create()
     # add hints for available types
     pass
 
@@ -188,8 +189,8 @@ def insert():
 def error_handler(errors: list):
     clear(error_frame)
     for error, row in zip(errors, range(len(errors))):
-        Label(error_frame, text=error, bg='gray', font=("Segoe UI", 10, 'normal')).grid(row=row, sticky='NW', padx=3,
-                                                                                        pady=3)
+        Label(error_frame, text=error, bg='#abaaa9', font=("Segoe UI", 10, 'normal')).grid(row=row, sticky='NW', padx=3,
+                                                                                           pady=3)
 
 
 def clear(master):

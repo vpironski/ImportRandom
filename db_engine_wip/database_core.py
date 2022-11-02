@@ -50,11 +50,13 @@ class Database:  # обект(клас) който ще съдържа конф�
 
     @staticmethod
     def create(config_dictionary, name):
+
         os.chdir(os.getcwd()+"/db_engine_wip")
         file =  f"Databases/{name}{file_extension}"
         path = str(f"{os.getcwd()}/Databases/{file}")
 
         if not os.path.exists(f"Databases/{file}"):
+
             list_columns = []
             for i in config_dictionary:
                 # if config_dictionary[i] in types_length:

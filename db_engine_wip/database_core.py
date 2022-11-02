@@ -1,6 +1,6 @@
 import re
 import os
-import shutil
+
 
 # add different data types here with their corresponding length (example 'date': 10)
 types_length = {'date': 10, 'gender': 1}

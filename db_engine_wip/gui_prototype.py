@@ -6,8 +6,11 @@ import database_core
 from database_core import Database
 import database_insert
 
-
-# hints_for_types = {'date': ''}
+create_hints = [
+    f'Available types: {database_core.types_length.keys()}'
+    'Column names: 1 word only [a-z](uppercase too) or multiple words divided with \'_\'. '
+    'Column types or length: number (length) or type (see available types).'
+]
 
 
 def open_db():
@@ -187,7 +190,7 @@ def error_handler(errors: list):
     clear(error_frame)
     for error, row in zip(errors, range(len(errors))):
         Label(error_frame, text=error, bg='#abaaa9', font=("Segoe UI", 10, 'normal')).grid(row=row, sticky='NW', padx=3,
-                                                                                        pady=3)
+                                                                                           pady=3)
 
 
 def clear(master):

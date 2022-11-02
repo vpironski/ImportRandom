@@ -50,7 +50,7 @@ class Database:  # обект(клас) който ще съдържа конф�
     @staticmethod
     def create(config_dictionary, name):
         file = f'Databases/{name}{file_extension}'
-        if not os.path.exists(f'Databases/{file}'):
+        if not os.path.exists(file):
             list_columns = []
             for i in config_dictionary:
                 # if config_dictionary[i] in types_length:

@@ -1,5 +1,6 @@
 import re
 import os
+import io
 from datetime import datetime
 
 import database_core
@@ -10,15 +11,14 @@ def insert(database: database_core.Database, values: list):
     if not len(errors) == 0:
         return errors
     else:
+        database.db_file.seek(io.SEEK_END)
         database.entry_count += 1
-        values.insert(0, str(database.entry_count).zfill(5))
+        values.insert(0, str(database.entry_count).zfill(database_core.id_digits))
         values.insert(1, '1')
         for value, length in zip(values, database.colons.values()):
             database.db_file.write(value)
             if type(length) is int:
                 database.db_file.write((int(length) - len(value)) * '~')
-            else:
-                database.db_file.write(length)
         database.db_file.flush()
         os.fsync(database.db_file.fileno())
 

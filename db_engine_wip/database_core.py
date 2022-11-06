@@ -5,6 +5,8 @@ import re
 types_length = {'date': 10, 'gender': 1, 'course_number': 5}
 database_extension = '.datab'
 meta_extension = '.meta'
+# max entries = largest number with 'id_digits' digits:
+id_digits = 6
 
 
 class Database:
@@ -28,7 +30,7 @@ class Database:
             while config[-1] != '!':
                 config += meta_file.read(1)
                 self.config_line_length += 1
-            self.entry_count = int(meta_file.read(1))
+            self.entry_count = int(meta_file.read(id_digits))
 
         for colon in config.lower().strip(',!').split(','):
             name = re.sub(r'\|.*?\||[0-9]+', '', colon)
@@ -75,10 +77,15 @@ class Database:
     def close(self):
         with open(f'{os.getcwd()}/Databases/{self.name}{meta_extension}', 'r+', encoding='utf-8') as meta_file:
             meta_file.seek(self.config_line_length)
-            meta_file.write(str(self.entry_count))
+            meta_file.write(str(self.entry_count).zfill(id_digits))
         self.db_file.close()
 
     def drop(self):
         # self.close()
         if os.path.exists(self.path):
             os.remove(self.path)
+
+    def get_entry_position(self, id_num):
+        beginning = id_num * self.entry_length + 1
+        end = (id_num + 1) * self.entry_length
+        return beginning, end

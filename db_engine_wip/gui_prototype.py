@@ -3,8 +3,8 @@ from tkinter import *
 from tkinter import filedialog
 
 import database_core
-from database_core import Database
 import database_insert
+from database_core import Database
 
 create_hints = [
     f'Available types: {database_core.types_length.keys()}'
@@ -14,18 +14,22 @@ create_hints = [
 
 
 def open_db():
+    clear(error_frame)
     clear(main_frame)
     global is_open
     global db
-    filename = filedialog.askopenfilename(initialdir=os.getcwd() + '/Databases',
-                                          title='Select a database',
-                                          filetypes=(('databases', database_core.file_extension),))
-    if filename:
-        db = Database(filename)
-        is_open = True
-        global open_label_text
-        open_label_text = f'Currently open: {db.name}.'
-        update_open_label()
+    if not is_open:
+        filename = filedialog.askopenfilename(initialdir=os.getcwd() + '/Databases/',
+                                              title='Select a database',
+                                              filetypes=(('databases', database_core.database_extension),))
+        if filename:
+            db = Database(filename)
+            is_open = True
+            global open_label_text
+            open_label_text = f'Currently open: {db.name}.'
+            update_open_label()
+    else:
+        error_handler(['You already have a database open!'])
 
 
 def close():
@@ -35,24 +39,27 @@ def close():
     global db
     global open_label_text
     if is_open:
-        db = None
+        db.close()
         is_open = False
         open_label_text = 'No database is currently open.'
         update_open_label()
     else:
-        # open_label.config(fg='red')
-        pass
+        error_handler(['No database is open!'])
 
 
 def drop():
+    close()
     if is_open:
         db.drop()
-        close()
-    else:
-        open_label.config(fg='red')
 
 
 def create():
+    clear(main_frame)
+    clear(error_frame)
+    if is_open:
+        error_handler(['Please close the database before creating a new one!'])
+        return
+
     # doesn't have a check for columns with the same names!
     input_frame_row = 0
     input_frame_column = 0
@@ -107,7 +114,9 @@ def create():
         conf_dict = dict()
         if create_input_frame.grid_slaves():
             if db_name.get():
-                for column in list[Label](create_input_frame.grid_slaves()):
+                input_labels = list[Label](create_input_frame.grid_slaves())
+                input_labels.reverse()
+                for column in input_labels:
                     raw_name = column['text'].split(',')
                     col_name = raw_name[0]
                     col_type = raw_name[1]
@@ -118,7 +127,6 @@ def create():
         else:
             error_handler(['Cannot create database with 0 columns'])
 
-    close()
     Label(main_frame, text='Name of the database').grid(row=0, column=0)
     db_name = Entry(main_frame)
     db_name.grid(row=1, column=0, padx=3, pady=1)
@@ -143,7 +151,11 @@ def create():
 
 
 def insert():
+    clear(error_frame)
+    clear(main_frame)
+
     def add_to_db():
+        clear(error_frame)
         values_list = []
         for val in list[Entry](insert_input_frame.grid_slaves(column=1) + insert_input_frame.grid_slaves(
                 column=4) + insert_input_frame.grid_slaves(column=7)):
@@ -154,20 +166,18 @@ def insert():
         if errors is not None:
             error_handler(errors)
         else:
-            clear(error_frame)
             for val in list[Entry](insert_input_frame.grid_slaves(column=1) + insert_input_frame.grid_slaves(
                     column=4) + insert_input_frame.grid_slaves(column=7)):
                 val.delete(0, END)
         # clear widgets
-
-    clear(main_frame)
 
     if is_open:
         insert_input_frame = Frame(main_frame)
         insert_input_frame.grid()
         grid_column = 0
         grid_row = 0
-        for colon in db.colons.keys():
+        colon_names_list = list(db.colons.keys())[2:]
+        for colon in colon_names_list:
             Label(insert_input_frame, text=colon).grid(row=grid_row, column=grid_column, padx=3, pady=3, ipadx=3,
                                                        ipady=3)
             Entry(insert_input_frame).grid(row=grid_row, column=grid_column + 1, ipadx=3, ipady=3)
@@ -183,7 +193,7 @@ def insert():
                                                                                                     pady=3, ipadx=3,
                                                                                                     ipady=3)
     else:
-        open_label.config(fg='red')
+        error_handler(['You have to have a database open to insert into.'])
 
 
 def error_handler(errors: list):

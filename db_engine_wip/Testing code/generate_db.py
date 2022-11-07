@@ -124,10 +124,11 @@ surname_list = [
 os.chdir('..')
 database = Database(f'{os.getcwd()}/Databases/generated.datab')
 
-for i in range(20000):
+for i in range(2000):
     name = random.choice(name_list)
     surname = random.choice(surname_list)
     gender = random.choice(['m', 'f', 'n'])
     birth_date = random_date()
-    database_insert.insert(database, [name, surname, gender, str(birth_date)])
+    course_number = str(random.randint(19000, 20000))
+    database_insert.insert(database, [name, surname, course_number, gender, str(birth_date)])
 database.close()

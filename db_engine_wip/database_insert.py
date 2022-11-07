@@ -12,23 +12,23 @@ def insert(database: database_core.Database, values: list):
         return errors
     else:
         database.db_file.seek(io.SEEK_END)
-        database.entry_count += 1
         values.insert(0, str(database.entry_count).zfill(database_core.id_digits))
         values.insert(1, '1')
-        for value, length in zip(values, database.colons.values()):
+        for value, length in zip(values, database.colons_types.values()):
             database.db_file.write(value)
             if type(length) is int:
                 database.db_file.write((int(length) - len(value)) * '~')
+        database.entry_count += 1
         database.db_file.flush()
         os.fsync(database.db_file.fileno())
 
 
 def check_lengths(database: database_core.Database, input_list: list):
-    if not len(input_list) == len(database.colons) - 2:
+    if not len(input_list) == len(database.colons_types) - 2:
         yield 'Wrong number of arguments!'
     else:
-        for colon, value in zip(list(database.colons.keys())[2:], input_list):
-            length_or_type = database.colons.get(colon)
+        for colon, value in zip(list(database.colons_types.keys())[2:], input_list):
+            length_or_type = database.colons_types.get(colon)
             if length_or_type not in database_core.types_length:
                 if len(value) > length_or_type:
                     yield f'Value at {colon} is too long!'

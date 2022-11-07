@@ -6,8 +6,8 @@ import database_insert
 
 
 def random_date():
-    start_date = datetime.date(1980, 1, 1)
-    end_date = datetime.date(2020, 2, 1)
+    start_date = datetime.date(1950, 1, 1)
+    end_date = datetime.date(2015, 12, 31)
 
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
@@ -65,65 +65,66 @@ name_list = [
     'David',
     'Kristofer',
     'Anne',
-    'Melanie'
+    'Melanie',
     'Geralt'
 ]
 surname_list = [
-    'Abdulla',
     'Anderson',
-    'Bach',
-    'Blackett',
-    'Bonsall',
-    'Callander',
-    'Carr',
-    'Clegg',
-    'Corbett',
-    'Cowan',
-    'Drummond',
-    'Egan',
-    'Ellis',
-    'Ellis',
-    'Evans',
-    'Eynon',
-    'Forward',
-    'Frazer',
-    'Galloway',
-    'Gerdes',
-    'Hardy',
-    'Herrmann',
-    'Hussain',
-    'Jacobs',
-    'Jones',
-    'Jones',
-    'Knox',
-    'Marshall',
-    'Martin',
-    'Maxwell',
-    'Moseley',
-    'Neale',
-    'Nelson',
-    'Nicholls',
-    'Nolan',
-    'Owen',
-    'Parma',
-    'Petit',
-    'Ranaldi',
-    'Roberts',
-    'Rogalski',
-    'Rollo',
-    'Shan',
-    'Shotton',
+    'Astbury',
+    'Bagshaw',
+    'Bashir',
+    'Bayne',
+    'Bowring',
+    'Cardwell',
+    'Clark',
+    'Coady',
+    'Dalton',
+    'Davies',
+    'Dennison',
+    'Donkor',
+    'Doyle',
+    'Feeley',
+    'Gizzi',
+    'Gowers',
+    'Griffiths',
+    'Grosvenor',
+    'Hall',
+    'Halliday',
+    'Hamilton',
+    'Harper',
+    'Houston',
+    'Huston',
+    'Johal',
+    'Johnson',
+    'Kendrew',
+    'Lambert',
+    'Lee',
+    'Marino',
+    'Moore',
+    'Norton',
+    'Pye',
+    'Riley',
+    'Robertson',
+    'Sadler',
+    'Shine',
     'Smith',
-    'Smith',
-    'Styles',
-    'Swan',
-    'Thorn',
-    'Vincent'
+    'Stagg',
+    'Steward',
+    'Taylor',
+    'Tierney',
+    'Tomkins',
+    'Wainwright',
+    'Waite',
+    'Webb',
+    'Whittle',
+    'Wilcock',
+    'Wishart'
 ]
 
+os.chdir('..')
 database = Database(f'{os.getcwd()}/Databases/generated.datab')
 
-for i in range(200):
+for i in range(20000):
     name = random.choice(name_list)
     surname = random.choice(surname_list)
     gender = random.choice(['m', 'f', 'n'])

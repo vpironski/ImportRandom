@@ -10,7 +10,7 @@ id_digits = 6
 
 
 class Database:
-    colons = dict()
+    colons_types = dict()
     path = ''
     name = ''
     entry_length = 0
@@ -20,9 +20,8 @@ class Database:
 
     def __init__(self, path_to_db):
         self.path = path_to_db
-        self.colons = dict()
+        self.colons_types = dict()
         self.db_file = open(path_to_db, 'a+', encoding='utf-8')
-        self.entry_length = self.get_entry_length()
         self.name = re.sub(database_extension, '', os.path.basename(self.path))
 
         with open(f'{os.getcwd()}/Databases/{self.name}{meta_extension}', 'r', encoding='utf-8') as meta_file:
@@ -32,12 +31,14 @@ class Database:
                 self.config_line_length += 1
             self.entry_count = int(meta_file.read(id_digits))
 
-        for colon in config.lower().strip(',!').split(','):
+        for colon in config.strip(',!').split(','):
             name = re.sub(r'\|.*?\||[0-9]+', '', colon)
             size_or_type = re.search(r'\|.*?\||[0-9]+', colon)[0].strip('|')
             if size_or_type.isnumeric():
                 size_or_type = int(size_or_type)
-            self.colons.update({name: size_or_type})
+            self.colons_types.update({name: size_or_type})
+
+        self.entry_length = self.get_entry_length()
 
     @staticmethod
     def validate_name(name):
@@ -46,7 +47,7 @@ class Database:
 
     def get_entry_length(self):
         length = 0
-        for value in list(self.colons.values()):
+        for value in list(self.colons_types.values()):
             if str(value).isnumeric():
                 length += value
             else:
@@ -62,7 +63,7 @@ class Database:
         meta_path = f'{os.getcwd()}/Databases/{meta_file}'
 
         if not os.path.exists(db_path):
-            list_columns = ['id5', 'is_active1']
+            list_columns = [f'id{id_digits}', 'is_active1']
             for i in config_dictionary:
                 list_columns.append(i + str(config_dictionary[i]))
 
@@ -81,11 +82,11 @@ class Database:
         self.db_file.close()
 
     def drop(self):
-        # self.close()
+        self.close()
         if os.path.exists(self.path):
             os.remove(self.path)
 
     def get_entry_position(self, id_num):
-        beginning = id_num * self.entry_length + 1
-        end = (id_num + 1) * self.entry_length
-        return beginning, end
+        beginning = id_num * self.entry_length
+        # end = (id_num + 1) * self.entry_length
+        return beginning

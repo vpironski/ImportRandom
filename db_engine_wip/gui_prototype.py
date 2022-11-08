@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import filedialog
 
 import database_core
-import database_insert
+import database_utils
 from database_core import Database
 
 create_hints = [
@@ -162,7 +162,7 @@ def insert():
             if not val.get() == '':
                 values_list.append(val.get())
         values_list.reverse()
-        errors = database_insert.insert(db, values_list)
+        errors = database_utils.insert(db, values_list)
         if errors is not None:
             error_handler(errors)
         else:
@@ -176,14 +176,14 @@ def insert():
         insert_input_frame.grid()
         grid_column = 0
         grid_row = 0
-        colon_names_list = list(db.colons.keys())[2:]
+        colon_names_list = list(db.colons_types.keys())[2:]
         for colon in colon_names_list:
             Label(insert_input_frame, text=colon).grid(row=grid_row, column=grid_column, padx=3, pady=3, ipadx=3,
                                                        ipady=3)
             Entry(insert_input_frame).grid(row=grid_row, column=grid_column + 1, ipadx=3, ipady=3)
-            Label(insert_input_frame, text=db.colons.get(colon)).grid(row=grid_row, column=grid_column + 2, padx=3,
-                                                                      pady=3,
-                                                                      ipadx=3, ipady=3)
+            Label(insert_input_frame, text=db.colons_types.get(colon)).grid(row=grid_row, column=grid_column + 2, padx=3,
+                                                                            pady=3,
+                                                                            ipadx=3, ipady=3)
             grid_row += 1
             if grid_row == 16:
                 grid_row = 0

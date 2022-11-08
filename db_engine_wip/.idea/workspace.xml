@@ -9,8 +9,8 @@
       <change beforePath="$PROJECT_DIR$/Databases/generated.datab" beforeDir="false" afterPath="$PROJECT_DIR$/Databases/generated.datab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Databases/generated.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Databases/generated.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Testing code/generate_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/generate_db.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Testing code/select_testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/select_testing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_select.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_select.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_insert.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui_prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui_prototype.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +21,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/database_insert.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/database_utils.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

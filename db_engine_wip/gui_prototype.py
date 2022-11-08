@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import filedialog
 
 import database_core
-import database_insert
+import database_utils
 from database_core import Database
 
 create_hints = [
@@ -162,7 +162,7 @@ def insert():
             if not val.get() == '':
                 values_list.append(val.get())
         values_list.reverse()
-        errors = database_insert.insert(db, values_list)
+        errors = database_utils.insert(db, values_list)
         if errors is not None:
             error_handler(errors)
         else:

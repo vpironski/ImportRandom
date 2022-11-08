@@ -5,10 +5,11 @@ import os
 os.chdir('..')
 db = Database('Databases/generated.datab')
 ids = database_select.select(db, {
-    'name': 'Geralt',
-    'gender': 'm',
-    'birth_date': '19..-..-24'
+    'birth_date': '.*',
+    'name': 'Adolf',
+    'surname': 'Hitler'
 })
 print(ids)
+print(len(ids))
 for i in ids:
     print(database_select.read_entry(db, i))

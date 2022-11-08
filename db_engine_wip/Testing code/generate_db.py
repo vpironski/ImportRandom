@@ -6,8 +6,8 @@ import database_insert
 
 
 def random_date():
-    start_date = datetime.date(1950, 1, 1)
-    end_date = datetime.date(2015, 12, 31)
+    start_date = datetime.date(1880, 1, 1)
+    end_date = datetime.date(1890, 12, 31)
 
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
@@ -66,7 +66,8 @@ name_list = [
     'Kristofer',
     'Anne',
     'Melanie',
-    'Geralt'
+    'Geralt',
+    'Adolf'
 ]
 surname_list = [
     'Anderson',
@@ -118,7 +119,8 @@ surname_list = [
     'Webb',
     'Whittle',
     'Wilcock',
-    'Wishart'
+    'Wishart',
+    'Hitler',
 ]
 
 os.chdir('..')

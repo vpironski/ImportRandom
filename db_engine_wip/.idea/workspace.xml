@@ -8,7 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Databases/generated.datab" beforeDir="false" afterPath="$PROJECT_DIR$/Databases/generated.datab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Databases/generated.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Databases/generated.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Testing code/fill_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/generate_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Testing code/generate_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/generate_db.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Testing code/select_testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/select_testing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_select.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_select.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

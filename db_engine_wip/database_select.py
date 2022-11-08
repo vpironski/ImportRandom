@@ -5,11 +5,11 @@ import re
 
 def select(database: Database, filters=None):
     if filters is None:
-        return list(range(0, database.entry_count - 1))
+        return list(range(0, database.entry_count))
     active_value_index = database_core.id_digits
 
     new_ids = []
-    for id_num in range(0, database.entry_count - 1):
+    for id_num in range(0, database.entry_count):
         entry_str = read_entry(database, id_num)
         if entry_str[active_value_index] == '1':
             entry_dict = get_dict(database, entry_str)

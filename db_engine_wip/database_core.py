@@ -21,7 +21,7 @@ class Database:
     def __init__(self, path_to_db):
         self.path = path_to_db
         self.colons_types = dict()
-        self.db_file = open(path_to_db, 'a+', encoding='utf-8')
+        self.db_file = open(path_to_db, 'r+', encoding='utf-8')
         self.name = re.sub(database_extension, '', os.path.basename(self.path))
 
         with open(f'{os.getcwd()}/Databases/{self.name}{meta_extension}', 'r', encoding='utf-8') as meta_file:

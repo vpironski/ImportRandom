@@ -1,8 +1,8 @@
 import datetime
 import random
 import os
-from database_core import Database
-import database_utils
+from db_engine.database_core import Database
+from db_engine import database_utils
 
 
 def random_date():
@@ -126,7 +126,7 @@ surname_list = [
 os.chdir('..')
 database = Database(f'{os.getcwd()}/Databases/generated.datab')
 
-for i in range(9):
+for i in range(100000):
     name = random.choice(name_list)
     surname = random.choice(surname_list)
     gender = random.choice(['m', 'f', 'n'])

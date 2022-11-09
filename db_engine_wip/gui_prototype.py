@@ -156,7 +156,7 @@ def insert():
 
     def add_to_db():
         clear(error_frame)
-        values_list = []
+        values_list = ['1']
         for val in list[Entry](insert_input_frame.grid_slaves(column=1) + insert_input_frame.grid_slaves(
                 column=4) + insert_input_frame.grid_slaves(column=7)):
             if not val.get() == '':

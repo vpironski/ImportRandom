@@ -1,14 +1,13 @@
 import re
 import os
 from datetime import datetime
-
+import database_select
 import database_core
 
 
 def insert(database: database_core.Database, values: list, id_num=None):
     if id_num is None:
         id_num = database.entry_count
-
     errors = list(check_lengths(database, values))
     if not len(errors) == 0:
         return errors
@@ -17,20 +16,20 @@ def insert(database: database_core.Database, values: list, id_num=None):
             database.get_entry_position(id_num)
         )
         values.insert(0, str(id_num).zfill(database_core.id_digits))
-        values.insert(1, '1')
         database.db_file.write(
-            generate_line_str(database, values, id_num)
+            generate_line_str(database, values)
         )
-        database.entry_count += 1
+        if id_num == database.entry_count:
+            database.entry_count += 1
         database.db_file.flush()
         os.fsync(database.db_file.fileno())
 
 
 def check_lengths(database: database_core.Database, input_list: list):
-    if not len(input_list) == len(database.colons_types) - 2:
+    if not len(input_list) == len(database.colons_types) - 1:
         yield 'Wrong number of arguments!'
     else:
-        for colon, value in zip(list(database.colons_types.keys())[2:], input_list):
+        for colon, value in zip(list(database.colons_types.keys())[1:], input_list):
             length_or_type = database.colons_types.get(colon)
             if length_or_type not in database_core.types_length:
                 if len(value) > length_or_type:
@@ -49,10 +48,22 @@ def check_lengths(database: database_core.Database, input_list: list):
                         yield f'Incorrect value at \'{colon}\', course number should be exactly 5 digits long'
 
 
-def generate_line_str(database: database_core.Database, values: list, id_num):
+def generate_line_str(database: database_core.Database, values: list):
     line = ''
     for value, length in zip(values, database.colons_types.values()):
         line += value
         if type(length) is int:
             line += (int(length) - len(value)) * '~'
     return line
+
+
+def update(database: database_core.Database, updates: dict, id_num: int):
+    current = database_select.get_dict(database,
+                                       database_select.read_entry(database, id_num))
+    current.pop('id')
+    current.update(updates)
+    insert(database, list(current.values()), id_num)
+
+
+def delete(database: database_core.Database, id_num):
+    update(database, {'is_active': '0'}, id_num)

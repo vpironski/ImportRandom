@@ -5,25 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d259c9ad-46ac-4f69-9e5b-95f198b15d1a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/db_engine/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Databases/generated.datab" beforeDir="false" afterPath="$PROJECT_DIR$/Databases/generated.datab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Databases/generated.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Databases/generated.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Testing code/generate_db.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/generate_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Testing code/select_testing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Testing code/select_testing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_core.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_core.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_select.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_select.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/database_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui_prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui_prototype.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_core.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine/database_core.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_select.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine/database_select.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine/database_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui_prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine/gui_prototype.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-  </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/database_utils.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -43,6 +49,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/db_engine" />
       <recent name="$PROJECT_DIR$/Testing code" />
       <recent name="$PROJECT_DIR$/Databases" />
     </key>

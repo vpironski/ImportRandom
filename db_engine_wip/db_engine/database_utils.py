@@ -1,8 +1,8 @@
 import re
 import os
 from datetime import datetime
-import database_select
-import database_core
+from db_engine import database_select
+from db_engine import database_core
 
 
 def insert(database: database_core.Database, values: list, id_num=None):
@@ -51,9 +51,10 @@ def check_lengths(database: database_core.Database, input_list: list):
 def generate_line_str(database: database_core.Database, values: list):
     line = ''
     for value, length in zip(values, database.colons_types.values()):
-        line += value
         if type(length) is int:
-            line += (int(length) - len(value)) * '~'
+            line += f'{value:~<{length}}'
+        else:
+            line += value
     return line
 
 

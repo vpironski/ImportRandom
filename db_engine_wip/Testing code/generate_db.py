@@ -126,7 +126,7 @@ surname_list = [
 os.chdir('..')
 database = Database(f'{os.getcwd()}/Databases/generated.datab')
 
-for i in range(100000):
+for i in range(3):
     name = random.choice(name_list)
     surname = random.choice(surname_list)
     gender = random.choice(['m', 'f', 'n'])

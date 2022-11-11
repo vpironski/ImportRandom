@@ -2,9 +2,9 @@ import os
 from tkinter import *
 from tkinter import filedialog
 
-import database_core
-import database_utils
-from database_core import Database
+from db_engine import database_core
+from db_engine import database_utils
+from db_engine.database_core import Database
 
 create_hints = [
     f'Available types: {database_core.types_length.keys()}'

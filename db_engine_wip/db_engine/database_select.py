@@ -1,5 +1,5 @@
-from database_core import Database
-import database_core
+from db_engine import database_core
+from db_engine.database_core import Database
 import re
 
 

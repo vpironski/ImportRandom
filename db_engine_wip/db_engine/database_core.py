@@ -59,8 +59,8 @@ class Database:
 
         database_file = f"{name}{database_extension}"
         meta_file = f'{name}{meta_extension}'
-        db_path = f"{os.getcwd()}/Databases/{database_file}"
-        meta_path = f'{os.getcwd()}/Databases/{meta_file}'
+        db_path = f"../Databases/{database_file}"
+        meta_path = f'../Databases/{meta_file}'
 
         if not os.path.exists(db_path):
             list_columns = [f'id{id_digits}', 'is_active1']

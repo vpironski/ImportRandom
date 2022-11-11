@@ -19,7 +19,7 @@ def open_db():
     global is_open
     global db
     if not is_open:
-        filename = filedialog.askopenfilename(initialdir=os.getcwd() + '/Databases/',
+        filename = filedialog.askopenfilename(initialdir='../Databases/',
                                               title='Select a database',
                                               filetypes=(('databases', database_core.database_extension),))
         if filename:
@@ -112,6 +112,7 @@ def create():
 
     def create_db():
         conf_dict = dict()
+        has_duplicates = False
         if create_input_frame.grid_slaves():
             if db_name.get():
                 input_labels = list[Label](create_input_frame.grid_slaves())
@@ -120,8 +121,16 @@ def create():
                     raw_name = column['text'].split(',')
                     col_name = raw_name[0]
                     col_type = raw_name[1]
-                    conf_dict.update({col_name: col_type})
-                Database.create(conf_dict, db_name.get())
+                    if col_name not in conf_dict.keys():
+                        conf_dict.update({col_name: col_type})
+                    else:
+                        has_duplicates = True
+                        break
+                if not has_duplicates:
+                    Database.create(conf_dict, db_name.get())
+                    clear(main_frame)
+                else:
+                    error_handler(['There must not be duplicate names of columns!'])
             else:
                 error_handler(['Please specify a database name.'])
         else:
@@ -181,7 +190,8 @@ def insert():
             Label(insert_input_frame, text=colon).grid(row=grid_row, column=grid_column, padx=3, pady=3, ipadx=3,
                                                        ipady=3)
             Entry(insert_input_frame).grid(row=grid_row, column=grid_column + 1, ipadx=3, ipady=3)
-            Label(insert_input_frame, text=db.colons_types.get(colon)).grid(row=grid_row, column=grid_column + 2, padx=3,
+            Label(insert_input_frame, text=db.colons_types.get(colon)).grid(row=grid_row, column=grid_column + 2,
+                                                                            padx=3,
                                                                             pady=3,
                                                                             ipadx=3, ipady=3)
             grid_row += 1

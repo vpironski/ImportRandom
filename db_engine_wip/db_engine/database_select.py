@@ -6,7 +6,6 @@ import re
 def select(database: Database, filters=None):
     active_value_index = database_core.id_digits
 
-    new_ids = []
     for id_num in range(0, database.entry_count):
         entry_str = read_entry(database, id_num)
         if entry_str[active_value_index] == '1':
@@ -18,10 +17,9 @@ def select(database: Database, filters=None):
                         match = False
                         break
                 if match:
-                    new_ids.append(id_num)
+                    yield id_num
             else:
-                new_ids.append(id_num)
-    return new_ids
+                yield id_num
 
 
 def read_entry(database: Database, id_num):

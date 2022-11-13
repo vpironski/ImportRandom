@@ -105,7 +105,7 @@ class SelectTable(ScrollFrame):
     def read_selected(self):
         for i in range(self.rows - 1):
             if self.checkBoxes[i].get() == 1:
-                yield self.tBody.grid_slaves(row=i + 1)[-1]['text']
+                yield int(self.tBody.grid_slaves(row=i + 1)[-1]['text'])
 
 
 class TableInputFrame(tk.Frame):

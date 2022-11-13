@@ -1,6 +1,5 @@
 import datetime
 import random
-import os
 from db_engine.database_core import Database
 from db_engine import database_utils
 
@@ -123,10 +122,9 @@ surname_list = [
     'Hitler',
 ]
 
-os.chdir('..')
-database = Database(f'{os.getcwd()}/Databases/generated.datab')
+database = Database('../Databases/generated.datab')
 
-for i in range(3):
+for i in range(20000):
     name = random.choice(name_list)
     surname = random.choice(surname_list)
     gender = random.choice(['m', 'f', 'n'])

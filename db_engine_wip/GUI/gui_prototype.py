@@ -195,6 +195,7 @@ def select():
         clear(main_frame)
         nonlocal select_input_frame
         filters = select_input_frame.read_input()
+        filters = filters if filters != {} else None
         row_ids = database_select.select(db, filters)
 
         dictionary = db.colons_types.copy()
@@ -209,17 +210,21 @@ def select():
         table.grid(row=0, column=0, sticky='nsew', pady=10, padx=(20, 40))
         table.grid_propagate(False)
 
-        Button(main_frame, text='Print selected', command=lambda: printSel(table)) \
-            .grid(sticky='nw')
+        Button(main_frame, text='DELETE SELECTED', command=lambda: delete(table)) \
+            .grid(row=1, column=0, sticky='nw', padx=5, pady=5)
+        Button(main_frame, text='UPDATE SELECTED', command=lambda: print('Not done yet!')) \
+            .grid(row=1, column=1, sticky='nw', padx=5, pady=5)
+
         for row_id in row_ids:
             columns = list(database_select.get_dict(db, database_select.read_entry(db, row_id)).values())
             columns.pop(1)
             table.add_row(columns)
 
-    def printSel(table: SelectTable):
+    def delete(table: SelectTable):
         selected = table.read_selected()
-        for ls in selected:
-            print(ls)
+        for id_index in selected:
+            print(id_index)
+            database_utils.delete(db, id_index)
 
     clear(main_frame)
     if is_open:

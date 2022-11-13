@@ -5,10 +5,11 @@ import re
 
 def select(database: Database, filters=None):
     active_value_index = database_core.id_digits
-
+    ids_sent = 0
+    max_ids = 1000
     for id_num in range(0, database.entry_count):
         entry_str = read_entry(database, id_num)
-        if entry_str[active_value_index] == '1':
+        if entry_str[active_value_index] == '1' and ids_sent < max_ids:
             entry_dict = get_dict(database, entry_str)
             if filters is not None:
                 match = True
@@ -18,8 +19,10 @@ def select(database: Database, filters=None):
                         break
                 if match:
                     yield id_num
+                    ids_sent += 1
             else:
                 yield id_num
+                ids_sent += 1
 
 
 def read_entry(database: Database, id_num):

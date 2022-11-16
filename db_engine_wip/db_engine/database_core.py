@@ -10,21 +10,15 @@ id_digits = 6
 
 
 class Database:
-    colons_types = dict()
-    path = ''
-    name = ''
-    entry_length = 0
-    config_line_length = 1
-    entry_count = 0
-    db_file = None
-
     def __init__(self, path_to_db):
         self.path = path_to_db
         self.colons_types = dict()
+        self.config_line_length = 1
         self.db_file = open(path_to_db, 'r+', encoding='utf-8')
         self.name = re.sub(database_extension, '', os.path.basename(self.path))
 
-        with open(f'{os.getcwd()}/Databases/{self.name}{meta_extension}', 'r', encoding='utf-8') as meta_file:
+        # with open(f'{os.getcwd()}/Databases/{self.name}{meta_extension}', 'r', encoding='utf-8') as meta_file:
+        with open(f'../Databases/{self.name}{meta_extension}', 'r', encoding='utf-8') as meta_file:
             config = meta_file.read(1)
             while config[-1] != '!':
                 config += meta_file.read(1)
@@ -59,8 +53,8 @@ class Database:
 
         database_file = f"{name}{database_extension}"
         meta_file = f'{name}{meta_extension}'
-        db_path = f"{os.getcwd()}/Databases/{database_file}"
-        meta_path = f'{os.getcwd()}/Databases/{meta_file}'
+        db_path = f"../Databases/{database_file}"
+        meta_path = f'../Databases/{meta_file}'
 
         if not os.path.exists(db_path):
             list_columns = [f'id{id_digits}', 'is_active1']
@@ -76,7 +70,7 @@ class Database:
             return ['File already exists!']
 
     def close(self):
-        with open(f'{os.getcwd()}/Databases/{self.name}{meta_extension}', 'r+', encoding='utf-8') as meta_file:
+        with open(f'../Databases/{self.name}{meta_extension}', 'r+', encoding='utf-8') as meta_file:
             meta_file.seek(self.config_line_length)
             meta_file.write(str(self.entry_count).zfill(id_digits))
         self.db_file.close()

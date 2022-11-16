@@ -1,15 +1,15 @@
-from database_core import Database
-import database_core
+from db_engine import database_core
+from db_engine.database_core import Database
 import re
 
 
 def select(database: Database, filters=None):
     active_value_index = database_core.id_digits
-
-    new_ids = []
+    ids_sent = 0
+    max_ids = 1000
     for id_num in range(0, database.entry_count):
         entry_str = read_entry(database, id_num)
-        if entry_str[active_value_index] == '1':
+        if entry_str[active_value_index] == '1' and ids_sent < max_ids:
             entry_dict = get_dict(database, entry_str)
             if filters is not None:
                 match = True
@@ -18,10 +18,11 @@ def select(database: Database, filters=None):
                         match = False
                         break
                 if match:
-                    new_ids.append(id_num)
+                    yield id_num
+                    ids_sent += 1
             else:
-                new_ids.append(id_num)
-    return new_ids
+                yield id_num
+                ids_sent += 1
 
 
 def read_entry(database: Database, id_num):

@@ -1,15 +1,19 @@
-import os
 from tkinter import *
 from tkinter import filedialog
+from tkinter_additional_classes import *
+from db_engine import database_core
+from db_engine import database_utils
+from db_engine import database_select
+from db_engine.database_core import Database
 
-import database_core
-import database_utils
-from database_core import Database
-
-create_hints = [
-    f'Available types: {database_core.types_length.keys()}'
-    'Column names: 1 word only [a-z](uppercase too) or multiple words divided with \'_\'. '
-    'Column types or length: number (length) or type (see available types).'
+hints = [
+    'Column names: 1 word only [a-z](uppercase too) \n or multiple words divided with \'_\'. ',
+    f'Available types: {database_core.types_length.keys()}',
+    'Column types or length: number (length) or type (see available types).',
+    '-- \'date\' - YYYY-MM-DD (2001-03-27)',
+    '-- \'gender\' - m/f/n',
+    '-- \'course_number\' - exactly 5 digits long (19201)',
+    'Important: Select function works with regexes too for broader searches.'
 ]
 
 
@@ -19,7 +23,7 @@ def open_db():
     global is_open
     global db
     if not is_open:
-        filename = filedialog.askopenfilename(initialdir=os.getcwd() + '/Databases/',
+        filename = filedialog.askopenfilename(initialdir='../Databases/',
                                               title='Select a database',
                                               filetypes=(('databases', database_core.database_extension),))
         if filename:
@@ -112,6 +116,7 @@ def create():
 
     def create_db():
         conf_dict = dict()
+        has_duplicates = False
         if create_input_frame.grid_slaves():
             if db_name.get():
                 input_labels = list[Label](create_input_frame.grid_slaves())
@@ -120,8 +125,16 @@ def create():
                     raw_name = column['text'].split(',')
                     col_name = raw_name[0]
                     col_type = raw_name[1]
-                    conf_dict.update({col_name: col_type})
-                Database.create(conf_dict, db_name.get())
+                    if col_name not in conf_dict.keys():
+                        conf_dict.update({col_name: col_type})
+                    else:
+                        has_duplicates = True
+                        break
+                if not has_duplicates:
+                    Database.create(conf_dict, db_name.get())
+                    clear(main_frame)
+                else:
+                    error_handler(['There must not be duplicate names of columns!'])
             else:
                 error_handler(['Please specify a database name.'])
         else:
@@ -156,12 +169,8 @@ def insert():
 
     def add_to_db():
         clear(error_frame)
-        values_list = ['1']
-        for val in list[Entry](insert_input_frame.grid_slaves(column=1) + insert_input_frame.grid_slaves(
-                column=4) + insert_input_frame.grid_slaves(column=7)):
-            if not val.get() == '':
-                values_list.append(val.get())
-        values_list.reverse()
+        values_list = ['1']  # is_active
+        values_list += insert_input_frame.read_input().values()
         errors = database_utils.insert(db, values_list)
         if errors is not None:
             error_handler(errors)
@@ -172,35 +181,71 @@ def insert():
         # clear widgets
 
     if is_open:
-        insert_input_frame = Frame(main_frame)
+        insert_input_frame = TableInputFrame(main_frame, db.colons_types)
         insert_input_frame.grid()
-        grid_column = 0
-        grid_row = 0
-        colon_names_list = list(db.colons_types.keys())[2:]
-        for colon in colon_names_list:
-            Label(insert_input_frame, text=colon).grid(row=grid_row, column=grid_column, padx=3, pady=3, ipadx=3,
-                                                       ipady=3)
-            Entry(insert_input_frame).grid(row=grid_row, column=grid_column + 1, ipadx=3, ipady=3)
-            Label(insert_input_frame, text=db.colons_types.get(colon)).grid(row=grid_row, column=grid_column + 2, padx=3,
-                                                                            pady=3,
-                                                                            ipadx=3, ipady=3)
-            grid_row += 1
-            if grid_row == 16:
-                grid_row = 0
-                grid_column += 3
 
-        Button(main_frame, text='Insert', width=10, bg='green', fg='white', command=add_to_db).grid(padx=3,
-                                                                                                    pady=3, ipadx=3,
-                                                                                                    ipady=3)
+        Button(main_frame, text='Insert', width=10, bg='green', fg='white', command=add_to_db) \
+            .grid(padx=3, pady=3, ipadx=3, ipady=3)
     else:
         error_handler(['You have to have a database open to insert into.'])
 
 
+def select():
+    def show_results():
+        clear(main_frame)
+        nonlocal select_input_frame
+        filters = select_input_frame.read_input()
+        filters = filters if filters != {} else None
+        row_ids = database_select.select(db, filters)
+
+        dictionary = db.colons_types.copy()
+        del dictionary['is_active']
+        for column, length in zip(dictionary.keys(), dictionary.values()):
+            if type(length) is not int:
+                dictionary.update({column: database_core.types_length[length]})
+        dictionary.update({'Select': 1})
+
+        table = SelectTable(main_frame, dictionary,
+                            width=main_frame.winfo_width() - 60, height=600)
+        table.grid(row=0, column=0, sticky='nsew', pady=10, padx=(20, 40))
+        table.grid_propagate(False)
+
+        Button(main_frame, text='DELETE SELECTED', command=lambda: delete(table)) \
+            .grid(row=1, column=0, sticky='nw', padx=5, pady=5)
+        Button(main_frame, text='UPDATE SELECTED', command=lambda: print('Not done yet!')) \
+            .grid(row=1, column=1, sticky='nw', padx=5, pady=5)
+
+        for row_id in row_ids:
+            columns = list(database_select.get_dict(db, database_select.read_entry(db, row_id)).values())
+            columns.pop(1)
+            table.add_row(columns)
+
+    def delete(table: SelectTable):
+        selected = table.read_selected()
+        for id_index in selected:
+            print(id_index)
+            database_utils.delete(db, id_index)
+
+    clear(main_frame)
+    if is_open:
+        Label(main_frame, text='Write your search criteria here: ', font=("Segoe UI", 12, 'bold'))\
+            .grid(padx=10, pady=10, sticky='nw')
+        select_input_frame = TableInputFrame(main_frame, db.colons_types)
+        select_input_frame.grid(padx=20, pady=20)
+        Button(main_frame, text='Search', width=10, bg='green', fg='white', command=show_results) \
+            .grid(padx=3, pady=3, ipadx=3, ipady=3)
+
+    else:
+        error_handler(['Please open a database to select from!'])
+
+
 def error_handler(errors: list):
     clear(error_frame)
+    Label(error_frame, text='Errors: ', font=("Segoe UI", 12, 'bold'), bg='#abaaa9')\
+        .grid(row=0, sticky='nw', padx=3, pady=3)
     for error, row in zip(errors, range(len(errors))):
-        Label(error_frame, text=error, bg='#abaaa9', font=("Segoe UI", 10, 'normal')).grid(row=row, sticky='NW', padx=3,
-                                                                                           pady=3)
+        Label(error_frame, text=error, bg='#abaaa9', font=("Segoe UI", 10, 'bold'))\
+            .grid(row=row + 1, sticky='NW', padx=3, pady=3)
 
 
 def clear(master):
@@ -217,10 +262,11 @@ def update_open_label():
 root = Tk()
 root.title('Import Random DB v1')
 # root.iconbitmap("c:/vs.code/images/dice.ICO")
-root.geometry('1200x800')
-root.grid_columnconfigure(0, weight=3, minsize=800)
-root.grid_columnconfigure(1, weight=1, minsize=400)
-root.grid_rowconfigure(1, weight=1)
+root.geometry('1760x990')
+root.grid_columnconfigure(0, weight=5)
+root.grid_columnconfigure(1, weight=2)
+root.grid_rowconfigure(1, weight=3)
+root.grid_rowconfigure(2, weight=2)
 
 global db
 is_open = False
@@ -239,18 +285,25 @@ navbar_buttons = [
     Button(navbar_frame, text="drop", command=drop),
     Button(navbar_frame, text="create", command=create),
     Button(navbar_frame, text="insert", command=insert),
-    Button(navbar_frame, text="select"),
+    Button(navbar_frame, text="select", command=select),
     Button(navbar_frame, text="Exit", command=root.destroy)
 ]
 for button, col in zip(navbar_buttons, range(len(navbar_buttons))):
     button.grid(row=0, column=col, ipadx=3, ipady=3, padx=5, pady=5)
 
 main_frame = Frame(root)
-main_frame.grid(row=1, column=0, columnspan=3, sticky='nsew')
+main_frame.grid(row=1, column=0, sticky='nsew', rowspan=2)
 main_frame.grid_propagate(False)
 
-error_frame = Frame(root, relief=SUNKEN, bd=4, bg='#abaaa9')
-error_frame.grid(row=1, column=1, columnspan=1, sticky='nsew')
+error_frame = Frame(root, relief=SUNKEN, bd=3, bg='#abaaa9')
+error_frame.grid(row=1, column=1, sticky='nsew')
 error_frame.grid_propagate(False)
+
+hint_frame = Frame(root, relief=SUNKEN, bd=3, bg='#abaaa9')
+hint_frame.grid(row=2, column=1, sticky='nsew')
+hint_frame.grid_propagate(False)
+Label(hint_frame, text='Hints:', font=("Segoe UI", 12, 'bold'), bg='#abaaa9').grid(sticky='new')
+for hint in hints:
+    Label(hint_frame, text=hint, bg='#abaaa9', font=("Segoe UI", 10, 'bold')).grid(sticky='nw', pady=5, padx=5)
 
 root.mainloop()

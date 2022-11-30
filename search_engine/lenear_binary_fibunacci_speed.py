@@ -1,6 +1,6 @@
 import timeit
 import time
-from bisect import bisect_left
+
 
 # Declaring the needed veriables
 input = int(input("Enter the numbers to search: "))
@@ -11,7 +11,7 @@ file = []
 
 # Opening and creating an arr with the values ("Without \n")
 
-with open("search_engine/file.txt",'r',encoding='utf-8') as f:
+with open("search_engine/numbers.txt",'r',encoding='utf-8') as f:
 	for line in f:
 		fileNew.append(line)
 
@@ -116,6 +116,6 @@ endFibunacci = time.time()
 
 
 print("----------------------")
-print(f"Linear took: {endLinear - startLinear} s")
-print(f"Binary took: {endBinary - startBinary} s")
-print(f"Fibunacci took: {endFibunacci - startFibunacci} s")
+print(f"Linear took: {round((endLinear - startLinear),6)}s")
+print(f"Binary took: {round((endBinary - startBinary),6)}s")
+print(f"Fibunacci took: {round((endFibunacci - startFibunacci),6)}s")

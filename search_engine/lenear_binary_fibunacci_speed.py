@@ -116,6 +116,10 @@ endFibunacci = time.time()
 
 
 print("----------------------")
-print(f"Linear took: {round((endLinear - startLinear),6)}s")
-print(f"Binary took: {round((endBinary - startBinary),6)}s")
-print(f"Fibunacci took: {round((endFibunacci - startFibunacci),6)}s")
+linearTime = float("{:.6f}".format(float(endLinear - startLinear)))
+binaryTime = float("{:.6f}".format(float(endBinary - startBinary)))
+fibunacciTime = float("{:.6f}".format(float(endFibunacci - startFibunacci)))
+
+print(f"Linear took: {linearTime}s")
+print(f"Binary took: {binaryTime}s")
+print(f"Fibunacci took: {fibunacciTime}s")

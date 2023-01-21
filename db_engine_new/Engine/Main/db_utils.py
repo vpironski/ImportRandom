@@ -32,3 +32,14 @@ def cut_entry_to(labeled_entry: dict, columns: list):
         if column in columns:
             cut_entry.append(labeled_entry[column])
     return cut_entry
+
+
+def like(column_value, pattern: str):
+    if type(column_value) is not str:
+        raise InvalidSyntaxError('The like operator only works with strings.')
+    try:
+        pattern = re.compile(pattern)
+    except re.error:
+        raise InvalidSyntaxError(f'`{pattern}` is not a valid regular expression.')
+
+    return True if pattern.fullmatch(column_value) else False

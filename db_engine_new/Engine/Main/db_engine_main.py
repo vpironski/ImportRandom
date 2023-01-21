@@ -2,7 +2,6 @@ import os
 import pickle
 import struct
 import shutil
-# import db_engine_new.Engine.Main.db_utils
 from db_engine_new.Engine.Main.db_utils import *
 
 
@@ -252,14 +251,3 @@ def parse_statement(table: Table, statement: str):
     for a in table.translator.config:
         lambda_from_statement += a[0] + ', '
     return lambda_from_statement.strip(', ') + ': ' + statement
-
-
-def like(column_value, pattern: str):
-    if type(column_value) is not str:
-        raise InvalidSyntaxError('The like operator only works with strings.')
-    try:
-        pattern = re.compile(pattern)
-    except re.error:
-        raise InvalidSyntaxError(f'`{pattern}` is not a valid regular expression.')
-
-    return True if pattern.fullmatch(column_value) else False

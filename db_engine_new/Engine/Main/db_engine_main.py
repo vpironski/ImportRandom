@@ -1,8 +1,9 @@
 import os
-import re
 import pickle
 import struct
 import shutil
+# import db_engine_new.Engine.Main.db_utils
+from db_engine_new.Engine.Main.db_utils import *
 
 
 class Database:
@@ -100,7 +101,6 @@ class Database:
                 continue
             # problem here
             boolean = condition_check(current_entry)
-            # print(boolean)
             if not boolean:
                 continue
             # process entry according to columns
@@ -211,20 +211,6 @@ class Translator:
         return struct.pack(self.struct_format_str, *entry)
 
 
-def validate_name(name: str):
-    reg = re.compile(r'[a-zA-Z][a-zA-Z0-9]*(_[a-zA-Z][a-zA-Z0-9]*)*')
-    return True if reg.fullmatch(name) else False
-    pass
-
-
-def cut_entry_to(labeled_entry: dict, columns: list):
-    cut_entry = []
-    for column in labeled_entry.keys():
-        if column in columns:
-            cut_entry.append(labeled_entry[column])
-    return cut_entry
-
-
 """
 example of where statement structure
 where (<column_name> [=, >, <, >=, <=, =/ not =, in/ not in, between/ not between, like] <value>)+
@@ -234,7 +220,6 @@ col1 > 100 and col2 = 10
 
 def where(table: Table, statement: str, entry: list):
     lambda_from_statement = parse_statement(table, statement)
-    # print(lambda_from_statement, entry)
     return eval(lambda_from_statement)(*entry)
     # return boolean
     pass
@@ -242,7 +227,7 @@ def where(table: Table, statement: str, entry: list):
 
 def parse_statement(table: Table, statement: str):
     name = r'([a-zA-Z][a-zA-Z0-9]*(?:_[a-zA-Z][a-zA-Z0-9]*)*)'
-    operator = r'(==|>|<|>=|<=|!=|in|not\sin)'
+    operator = r'(==|>|<|>=|<=|!=|in|not\sin|like)'
     value = r'(\S+)'
     singular_statement = r'(?:' + name + r'\s' + operator + r'\s' + value + r')'
     divisor = r'(and|or)'
@@ -251,7 +236,13 @@ def parse_statement(table: Table, statement: str):
     if not full_statement.fullmatch(statement):
         raise InvalidSyntaxError(f'The statement `{statement}` is invalid.')
 
-    match = re.compile(r'([a-zA-Z][a-zA-Z0-9]*(?:_[a-zA-Z][a-zA-Z0-9]*)*)\s(=|>|<|>=|<=|!=|in|not\sin)\s(\S+)')\
+    like_operator = r'like\s(\'\S+\')'
+    like_matches = re.compile(name + r'\s' + like_operator).findall(statement)
+    if like_matches:
+        for match in like_matches:
+            statement = statement.replace(f'{match[0]} like {match[1]}', f'like({match[0]}, {match[1]})')
+
+    match = re.compile(name + r'\s(=|>|<|>=|<=|!=|in|not\sin)\s(\S+)') \
         .findall(statement)
     for columns in match:
         if columns[0] not in [column[0] for column in table.translator.config]:
@@ -263,20 +254,12 @@ def parse_statement(table: Table, statement: str):
     return lambda_from_statement.strip(', ') + ': ' + statement
 
 
-class InvalidIDError(Exception):
-    pass
+def like(column_value, pattern: str):
+    if type(column_value) is not str:
+        raise InvalidSyntaxError('The like operator only works with strings.')
+    try:
+        pattern = re.compile(pattern)
+    except re.error:
+        raise InvalidSyntaxError(f'`{pattern}` is not a valid regular expression.')
 
-
-class InvalidSyntaxError(Exception):
-    def __init__(self, message: str):
-        self.message = message
-
-
-class InvalidTableError(Exception):
-    def __init__(self, message: str):
-        self.message = message
-
-
-class CreationError(Exception):
-    def __init__(self, message: str):
-        self.message = message
+    return True if pattern.fullmatch(column_value) else False

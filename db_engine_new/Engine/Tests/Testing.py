@@ -1,4 +1,5 @@
-import Engine.Main.db_engine_main as eng
+import db_engine_new.Engine.Main.db_engine_main as eng
+
 """
 missing:
 shrink, regex search (like)
@@ -18,12 +19,11 @@ db = eng.Database('generated')
 # db.drop_schema()
 #  table creates & inserts are in generate
 
-columns = ['id', 'first_name', 'salary']
+columns = ['id', 'first_name', 'last_name', 'salary']
 for worker in db.linear_select('worker',
                                start=0,
-                               limit=500,
+                               # limit=10000,
                                columns=columns,
-                               condition='salary > float(90000)'):
+                               condition=''):
     print(worker)
     pass
-

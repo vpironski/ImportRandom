@@ -1,4 +1,33 @@
 import re
+import os
+
+data_types = {
+    'c': bytes,
+    '?': bool,
+    'h': int,
+    'H': int,
+    'i': int,
+    'I': int,
+    'q': int,
+    'Q': int,
+    'f': float,
+    'd': float,
+    's': str
+}
+
+data_types_descriptive = {
+    'c': 'char',
+    '?': 'bool',
+    'h': 'short',
+    'H': 'unsigned short',
+    'i': 'int',
+    'I': 'unsigned int',
+    'q': 'long',
+    'Q': 'unsigned long',
+    'f': 'float',
+    'd': 'double',
+    's': 'string'
+}
 
 
 class InvalidIDError(Exception):
@@ -21,7 +50,7 @@ class CreationError(Exception):
 
 
 def validate_name(name: str):
-    reg = re.compile(r'[a-zA-Z][a-zA-Z0-9]*(_[a-zA-Z][a-zA-Z0-9]*)*')
+    reg = re.compile(r'[a-zA-Z][a-zA-Z0-9_]*')
     return True if reg.fullmatch(name) else False
     pass
 

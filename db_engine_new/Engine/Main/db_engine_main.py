@@ -2,6 +2,7 @@ import os
 import pickle
 import struct
 import shutil
+import db_engine_new.Engine.Main.db_utils as util
 from db_engine_new.Engine.Main.db_utils import *
 
 
@@ -112,6 +113,7 @@ class Table:
     # open
     def __init__(self, table_dir: os.DirEntry):
         self.dir: os.DirEntry = table_dir
+        self.name = table_dir.name
         self.table = open(f'{table_dir.path}/{table_dir.name}.datab', mode='rb+')
         self.translator = Translator(f'{table_dir.path}/{table_dir.name}.meta')
         self.current_entry_count: int = int(
@@ -157,6 +159,13 @@ class Table:
             os.mkdir(f'Databases/{database_name}/{table_name}')
         except FileExistsError:
             raise CreationError(f'Database `{database_name}.{table_name}` already exists')
+        for column_tuple in structure:
+            if not validate_name(column_tuple[0]):
+                raise CreationError(f'Invalid column name at {column_tuple}, {column_tuple[0]}')
+            if not column_tuple[1] in util.data_types.keys():
+                raise CreationError(f'Invalid datatype at {column_tuple}, {column_tuple[1]}')
+            if not column_tuple[2] >= 0:
+                raise CreationError(f'Invalid column length at {column_tuple}, {column_tuple[2]}')
 
         with open(f'Databases/{database_name}/{table_name}/{table_name}.meta', mode='wb') as meta:
             structure = [('id', 'Q', 1), ('inf', 'q', 1)] + structure
@@ -169,6 +178,25 @@ class Table:
     def drop_table(self):
         self.close()
         shutil.rmtree(self.dir)
+
+    def get_structure_info(self):
+
+        info = list(self.translator.config)
+        del info[1]
+        for i, column in enumerate(info):
+            column = list(column)
+            column[1] = util.data_types_descriptive.get(column[1])
+            info[i] = column
+        return info
+
+    def get_column_names(self):
+        return [a[0] for a in self.translator.config]
+
+    def get_functional_column_names(self):
+        names = self.get_column_names()
+        del names[0]
+        del names[0]
+        return names
 
 
 class Translator:
@@ -191,6 +219,27 @@ class Translator:
             str_format += str(column[2]) + column[1]
         return str_format
 
+    def validate_entry_types(self, raw_entry: list):
+        datatypes = [util.data_types.get(a[1]) for a in self.config]
+        values = list()
+        for column, datatype in zip(raw_entry, datatypes):
+            try:
+                if datatype == int:
+                    values.append(int(column))
+                elif datatype == float:
+                    values.append(float(column))
+                elif datatype == bool:
+                    if column.lower() in ("true", "false"):
+                        values.append(column.lower() == "true")
+                    else:
+                        raise ValueError("Invalid value for boolean")
+                else:
+                    values.append(column)
+            except ValueError as e:
+                raise SyntaxError(f"Error casting value '{column}' to {datatype}: {e}")
+        pass
+        return values
+
     def from_bin(self, entry: bytearray):
         unpacked = list(struct.unpack(self.struct_format_str, entry))
         for column_value, i in zip(unpacked, range(len(unpacked))):
@@ -201,11 +250,13 @@ class Translator:
         return unpacked
 
     def to_bin(self, entry: list):
+        entry = self.validate_entry_types(entry)
         for column_value, i in zip(entry, range(len(entry))):
             if type(column_value) is not str:
                 continue
             if len(column_value) > self.config[i][2]:
-                raise InvalidSyntaxError(f'The value given for column #{i} is too long.')
+                raise InvalidSyntaxError(
+                    f'The value given for #{i} is {len(column_value)} bytes long, should be at most {self.config[i][2]}')
             entry[i] = column_value.encode('ascii')
         return struct.pack(self.struct_format_str, *entry)
 

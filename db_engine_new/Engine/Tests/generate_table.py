@@ -41,28 +41,30 @@ jobs = [
     'Lawyer'
 ]
 
-symbols = list(string.ascii_letters + string.digits + '!$#')
 
-try:
-    eng.Database.create('generated')
-except eng.CreationError as err:
-    print(err.message, 'Skipping...\n')
-db = eng.Database('generated')
-try:
-    db.create_table('worker', [('first_name', 's', 20),
-                               ('last_name', 's', 20),
-                               ('position', 's', 20),
-                               ('salary', 'd', 1),
-                               ('identification', 's', 5)])
-except eng.CreationError as err:
-    print(err.message, 'Skipping...\n')
+def generate(row_count: int):
+    symbols = list(string.ascii_letters + string.digits + '!$#')
 
-for i in range(990000):
-    entry = [
-        random.choice(first_names),
-        random.choice(last_names),
-        random.choice(jobs),
-        random.uniform(1000, 100000),
-        ''.join(random.choices(symbols, k=5))
-    ]
-    db.insert('worker', entry)
+    try:
+        eng.Database.create('generated')
+    except eng.CreationError as err:
+        print(err.message, 'Skipping...\n')
+    db = eng.Database('generated')
+    try:
+        db.create_table('worker', [('first_name', 's', 20),
+                                   ('last_name', 's', 20),
+                                   ('position', 's', 20),
+                                   ('salary', 'd', 1),
+                                   ('identification', 's', 5)])
+    except eng.CreationError as err:
+        print(err.message, 'Skipping...\n')
+
+    for i in range(row_count):
+        entry = [
+            random.choice(first_names),
+            random.choice(last_names),
+            random.choice(jobs),
+            random.uniform(1000, 100000),
+            ''.join(random.choices(symbols, k=5))
+        ]
+        db.insert('worker', entry)

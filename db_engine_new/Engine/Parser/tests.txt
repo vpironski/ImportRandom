@@ -1,0 +1,12 @@
+SELECT * FROM table_name WHERE column1 = "value" AND column2 NOT LIKE "sdkjhf";
+//INSERT INTO table_name (column1, column2, column3) VALUES ("value1", "value2", "value3");
+//UPDATE table_name SET column1 = "new_value" WHERE column2 = "value";
+//DELETE FROM table_name WHERE column_name = "value";
+/*
+CREATE TABLE table1(
+	name VARCHAR(20),
+	number INT,
+      age USHORT
+);
+*/
+//DROP TABLE table_name;

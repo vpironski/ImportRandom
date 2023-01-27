@@ -1,6 +1,6 @@
 import os
 
-import tabulate
+import Engine.lib.tabulate as tabulate
 
 import Engine.Main.db_engine_main as eng
 import Engine.Main.generate_table as gen

@@ -81,12 +81,16 @@ class Database:
             columns = [tup[0] for tup in list(table.translator.config)]
             del columns[1]
             # columns = range(2, len(table.translator.config))
+        else:
+            for column in columns:
+                if column not in [a[0] for a in self.tables.get(table_name).translator.config]:
+                    raise InvalidSyntaxError(f'Column {column} not found in table.')
 
         if start is None:
             start = 0
 
         # check if there is a limit and if limit is < entry_count
-        if limit <= 0 or limit > table.current_entry_count or limit is None:
+        if limit is None or limit <= 0 or limit > table.current_entry_count:
             limit = table.current_entry_count
 
         # check if there is a condition and call where

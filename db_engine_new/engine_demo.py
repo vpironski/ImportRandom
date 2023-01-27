@@ -1,10 +1,11 @@
 import os
-import sys
 
-import db_engine_new.Engine.Main.db_engine_main as eng
-import db_engine_new.Engine.Tests.generate_table as gen
 import tabulate
-import argparse
+
+import Engine.Main.db_engine_main as eng
+import Engine.Main.generate_table as gen
+
+os.chdir('./Engine/')
 
 
 def get_column_values(column_names):
@@ -26,7 +27,7 @@ def input_choice(options_: tuple):
             break
         else:
             print("Invalid choice. Please try again.")
-    return options[int(choice_) - 1]
+    return options_[int(choice_) - 1]
 
 
 def input_int(prompt: str):
@@ -42,6 +43,20 @@ def input_int(prompt: str):
 def input_yes_no(prompt: str):
     answer = input(prompt + '[yes/no]')
     return answer.strip().lower() == 'yes'
+
+
+def input_default(prompt: str, _int: bool = False):
+    input_str = input(prompt).strip()
+    if _int:
+        while input_str.strip() != '':
+            try:
+                return int(input_str)
+            except ValueError:
+                input_str = input('Invalid value. Try again: ')
+
+    if input_str == '':
+        return None
+    return input_str
 
 
 def choose_table(db_name: str): return input_choice(tuple(os.listdir(f'./Databases/{db_name}')))
@@ -86,7 +101,10 @@ while True:
 
         elif choice == options[2]:
             name = input('Enter name of schema')
-            eng.Database.create(name)
+            try:
+                eng.Database.create(name)
+            except eng.CreationError as e:
+                print(e.message)
 
         elif choice == options[3]:
             print('The generate method creates a new schema (generated) and inside, a new table (worker).',
@@ -111,24 +129,25 @@ while True:
             print(f'Table info for {choice}: ')
             print(table_structure_info(db, choice))
             print('Please provide the options needed for select...')
-            print('Possibilities are: --columns, --start, --limit, --condition')
-            print('All arguments should be written exactly as above and space separated or left out for defaults.')
-            print('--columns default is all')
-            print('--start default is 0')
-            print('--limit default is None')
-            print('--condition default is None (example condition: column1 > 2 and column2 like \'A.*\'')
-            print('possible conditional operators are: =, >, <, >=, <=, !=, in, not in, like')
-            print('press CTRL + D after you are done. \n>>')
-            parser = argparse.ArgumentParser()
-            parser.add_argument("--columns", help="Enter columns (comma separated)", default=None)
-            parser.add_argument("--start", help="Enter start", type=int, default=0)
-            parser.add_argument("--limit", help="Enter limit", type=int, default=-1)
-            parser.add_argument("--condition", help="Enter condition", default=None)
-            args = parser.parse_args(sys.stdin.read().split())
-            columns = args.columns.split(',') if args.columns else None
-            result = db.linear_select(choice, columns, args.start, args.limit, args.condition)
-            print(tabulate.tabulate(result, tablefmt=tabulate.tabulate_formats[3],
-                                    headers=[a[0] for a in db.tables.get(choice).translator.config]))
+            print('You can leave each of the following options empty for defaults.')
+            columns = input_default('Input the columns you want to display (comma separated): ')
+            if columns is not None:
+                columns = list(columns.replace(' ', '').split(','))
+            start = input_default('Enter the index at which you want to start searching (int): ', _int=True)
+            limit = input_default('Enter a limit (int): ', _int=True)
+            print('The condition should be in the following format: <column_name> <operator> <value> and/or .....')
+            print('Possible operators are: =, !=, >, >=, <, <=, in, not in, like')
+            print('"in" and "not in" take a tuple like syntax: (1, 2, 3)')
+            print('"like" takes any valid regex')
+            condition = input_default('Enter the condition (or leave blank): ')
+            try:
+                result = db.linear_select(choice, columns, start, limit, condition)
+                print(tabulate.tabulate(result, tablefmt=tabulate.tabulate_formats[3],
+                                        headers=[a[0] for a in db.tables.get(choice).translator.config]))
+            except eng.InvalidTableError as e:
+                print(e.message)
+            except eng.InvalidSyntaxError as e:
+                print(e.message)
             pass
         # insert
         elif choice == options[1]:
@@ -137,7 +156,14 @@ while True:
             print(f'Table info for {choice}: ')
             print(table_structure_info(db, choice))
             print('Please provide the column values needed for insert...')
-            db.insert(choice, get_column_values(db.tables.get(choice).get_functional_column_names()))
+            try:
+                db.insert(choice, get_column_values(db.tables.get(choice).get_functional_column_names()))
+            except eng.InvalidTableError as e:
+                print(e.message)
+            except eng.InvalidIDError as e:
+                print("Invalid id!")
+            except eng.InvalidSyntaxError as e:
+                print(e.message)
             pass
         # update/delete
         elif choice in options[2:3:]:
@@ -147,7 +173,12 @@ while True:
             print(table_structure_info(db, table_name))
             while True:
                 id_index = input_int('Select an ID: ')
-                result = [db.tables.get(table_name).read(id_index)]
+                try:
+                    result = [db.tables.get(table_name).read(id_index)]
+                except eng.InvalidIDError as e:
+                    print('Invalid id!')
+                except eng.InvalidSyntaxError as e:
+                    print(e.message)
                 print(tabulate.tabulate(result, tablefmt=tabulate.tabulate_formats[3],
                                         headers=[a[0] for a in db.tables.get(table_name).translator.config]))
                 if input_yes_no('Are you satisfied with the choice of entry?'):
@@ -165,7 +196,10 @@ while True:
                     if change == '':
                         continue
                     changes[column] = change
-                db.update(choice, id_index, changes)
+                try:
+                    db.update(choice, id_index, changes)
+                except eng.InvalidTableError as e:
+                    print(e.message)
 
             # delete
             elif choice == options[3]:
@@ -196,7 +230,10 @@ while True:
                 column_type = input("Enter column type: ")
                 column_length = input_int("Enter column length: ")
                 columns.append((column_name, column_type, column_length))
-            db.create_table(table_name, columns)
+            try:
+                db.create_table(table_name, columns)
+            except eng.CreationError as e:
+                print(e.message)
             pass
 
         # drop table

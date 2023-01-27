@@ -1,6 +1,6 @@
 import random
 import string
-import db_engine_new.Engine.Main.db_engine_main as eng
+import Engine.Main.db_engine_main as eng
 
 first_names = [
     'Emma',

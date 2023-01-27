@@ -1,5 +1,4 @@
 import re
-import os
 
 data_types = {
     'c': bytes,

@@ -2,8 +2,8 @@ import os
 import pickle
 import struct
 import shutil
-import db_engine_new.Engine.Main.db_utils as util
-from db_engine_new.Engine.Main.db_utils import *
+import Engine.Main.db_utils as util
+from Engine.Main.db_utils import *
 
 
 class Database:
@@ -70,7 +70,7 @@ class Database:
     def delete(self, table_name: str, id_index: int):
         self.update(table_name, id_index, {'inf': -1})
 
-    def linear_select(self, table_name: str, columns: list = None, start: int = 0, limit: int = -1,
+    def linear_select(self, table_name: str, columns: list = None, start: int = None, limit: int = None,
                       condition: str = None):
         if table_name not in self.tables:
             raise InvalidTableError(f'Table with name `{table_name}` was not found')
@@ -82,8 +82,11 @@ class Database:
             del columns[1]
             # columns = range(2, len(table.translator.config))
 
+        if start is None:
+            start = 0
+
         # check if there is a limit and if limit is < entry_count
-        if limit <= 0 or limit > table.current_entry_count:
+        if limit <= 0 or limit > table.current_entry_count or limit is None:
             limit = table.current_entry_count
 
         # check if there is a condition and call where
@@ -232,11 +235,11 @@ class Translator:
                     if column.lower() in ("true", "false"):
                         values.append(column.lower() == "true")
                     else:
-                        raise ValueError("Invalid value for boolean")
+                        raise InvalidSyntaxError("Invalid value for boolean")
                 else:
                     values.append(column)
             except ValueError as e:
-                raise SyntaxError(f"Error casting value '{column}' to {datatype}: {e}")
+                raise InvalidSyntaxError(f"Error casting value '{column}' to {datatype}: {e}")
         pass
         return values
 

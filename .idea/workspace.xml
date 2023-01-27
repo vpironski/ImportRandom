@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c70c3c1-144e-4eaa-a105-528b4c774100" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/ImportRandom.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ImportRandom.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_engine_new/Engine/Main/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine_new/Engine/Main/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_engine_new/Engine/Main/db_engine_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine_new/Engine/Main/db_engine_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_engine_new/Engine/Main/db_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine_new/Engine/Main/db_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_engine_new/Engine/Tests/generate_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine_new/Engine/Main/generate_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db_engine_new/Engine/engine_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/db_engine_new/engine_demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +42,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1674840080167</updated>
-      <workItem from="1674840081307" duration="2202000" />
+      <workItem from="1674840081307" duration="2710000" />
     </task>
     <servers />
   </component>

@@ -34,9 +34,15 @@ else:
     BOLD = ''
     UNDERLINE = ''
 
+
 def divisor(): print('-' * 50 + '\n')
+
+
 def warn(prompt: str): print(WARNING + prompt + ENDC)
+
+
 def fail(prompt: str): print(FAIL + prompt + ENDC)
+
 
 def get_column_values(column_names):
     values = []
@@ -47,17 +53,20 @@ def get_column_values(column_names):
 
 
 def input_choice(options_: tuple):
+    options_ = list(options_)
+    options_ = ['BACK'] + options_
     divisor()
     for i, item in enumerate(options_):
-        print("{}. {}".format(i + 1, item))
+        print("{}. {}".format(i, item))
+    print(f'When choosing you have to write the number that represents your choice above.')
     print(f"{BOLD}Please choose one of the above options: {ENDC}")
     while True:
         choice_ = input()
-        if choice_.isnumeric() and 1 <= int(choice_) <= len(options_):
+        if choice_.isnumeric() and 0 <= int(choice_) <= len(options_):
             break
         else:
             warn("Invalid choice. Please try again. ")
-    return options_[int(choice_) - 1]
+    return options_[int(choice_)]
 
 
 def input_int(prompt: str):
@@ -117,34 +126,47 @@ while True:
     is_open = False
     while not is_open:
         db = None
-        options = ('USE', 'DROP', 'CREATE', 'GENERATE', 'EXIT DEMO')
+        options = ('USE', 'DROP', 'CREATE', 'GENERATE')
         databases = tuple(os.listdir('./Databases/'))
         choice = input_choice(options)
         if choice == options[0]:
-            db = eng.Database(input_choice(databases))
+            db = input_choice(databases)
+            if db == 'BACK':
+                continue
+            db = eng.Database(db)
             print(table_sizes(db))
             is_open = True
 
         elif choice == options[1]:
-            db = eng.Database(input_choice(databases))
+            db = input_choice(databases)
+            if db == 'BACK':
+                continue
+            db = eng.Database(db)
             if input_yes_no(f'{WARNING}Are you sure you want to permanently delete {db.name}'):
                 db.drop_schema()
                 print(f'{OKGREEN}Success.{ENDC}')
 
         elif choice == options[2]:
-            name = input('Enter name of schema')
+            name = input(f'Enter name of schema {BOLD}(or 0 to return to menu){ENDC}: ')
+            if name == '0':
+                continue
             try:
                 eng.Database.create(name)
             except eng.CreationError as e:
                 fail(e.message)
 
         elif choice == options[3]:
-            print(f'The generate method creates a new schema/database {OKGREEN}generated{ENDC} and inside, a new table {OKGREEN}worker{ENDC}.',
-                  'The table has columns: first_name, last_name, position, salary, identification')
+            print(
+                f'The generate method creates a new schema/database {OKGREEN}generated{ENDC} and inside, a new table {OKGREEN}worker{ENDC}.',
+                '\nTable info: ')
+            print(table_structure_info(eng.Database('generated'), 'worker'))
+            print(f'\n{BOLD}Enter 0 to return to menu.{ENDC}')
             count = input_int(f'How many rows would you like to generate? {OKCYAN}(int){ENDC}:')
+            if count == 0:
+                continue
             gen.generate(count)
 
-        else:
+        elif choice == 'BACK':
             stopped = True
             break
     if stopped:
@@ -152,11 +174,13 @@ while True:
 
     while True:
         # db was opened ->
-        options = ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'COUNT ROWS', 'CREATE TABLE', 'DROP TABLE', 'BACK')
+        options = ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'COUNT ROWS', 'CREATE TABLE', 'DROP TABLE')
         choice = input_choice(options)
         # select
         if choice == options[0]:
             choice = choose_table(db.name)
+            if choice == 'BACK':
+                continue
             print(f'Table info for {BOLD}{choice}{ENDC}: ')
             print(table_structure_info(db, choice))
             print('Please provide the options needed for select...')
@@ -164,9 +188,11 @@ while True:
             columns = input_default(f'Input the columns you want to display {OKCYAN}(comma separated){ENDC}: ')
             if columns is not None:
                 columns = list(columns.replace(' ', '').split(','))
-            start = input_default(f'Enter the index at which you want to start searching {OKCYAN}(int){ENDC}: ', _int=True)
+            start = input_default(f'Enter the index at which you want to start searching {OKCYAN}(int){ENDC}: ',
+                                  _int=True)
             limit = input_default(f'Enter a limit {OKCYAN}(int){ENDC}: ', _int=True)
-            print(f'The condition should be in the following format: {OKCYAN}<column_name> <operator> <value> and/or ... {ENDC}')
+            print(
+                f'The condition should be in the following format: {OKCYAN}<column_name> <operator> <value> and/or ... {ENDC}')
             print(f'Possible operators are: {OKCYAN}=, !=, >, >=, <, <=, in, not in, like{ENDC}')
             print(f'{OKCYAN}"in"{ENDC} and {OKCYAN}"not in"{ENDC} take a tuple like syntax: (1, 2, 3)')
             print(f'{OKCYAN}"like"{ENDC} takes any valid regex')
@@ -183,6 +209,8 @@ while True:
         # insert
         elif choice == options[1]:
             choice = choose_table(db.name)
+            if choice == 'BACK':
+                continue
             print(f'Table info for {BOLD}{choice}{ENDC}: ')
             print(table_structure_info(db, choice))
             print('Please provide the column values needed for insert...')
@@ -198,6 +226,8 @@ while True:
         # update/delete
         elif choice in options[2:3:]:
             table_name = choose_table(db.name)
+            if choice == 'BACK':
+                continue
             print(f'Table info for {BOLD}{table_name}{ENDC}: ')
             print(table_structure_info(db, table_name))
             while True:
@@ -245,7 +275,8 @@ while True:
             print('Create table....')
             print('You will be prompted to enter all data needed for creating a new table.')
             table_name = input('Choose a table name: ')
-            if not input_yes_no(f'You are about to create {BOLD}{db.name}.{table_name}{BOLD} . {UNDERLINE}Do you wish to continue?{ENDC} '):
+            if not input_yes_no(
+                    f'You are about to create {BOLD}{db.name}.{table_name}{BOLD} . {UNDERLINE}Do you wish to continue?{ENDC} '):
                 continue
             print('Names must start with any letter and can include upper and lower case letters, numbers and _')
             print('Available datatypes: ')
@@ -268,10 +299,12 @@ while True:
         # drop table
         elif choice == options[6]:
             table_name = choose_table(db.name)
+            if choice == 'BACK':
+                continue
             if input_yes_no(f'{WARNING}Are you sure you want to permanently delete {table_name}? {ENDC}'):
                 db.tables.get(table_name).drop()
             pass
-        else:
+        elif choice == 'BACK':
             del db
             break
             pass
